@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="AzureReportModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="BaseThread">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Rank" Type="int" />
+          <Property Name="WeightImpact" Type="numeric" Precision="5" Scale="2" />
+          <Property Name="TechCategory" Type="nvarchar" MaxLength="50" />
+          <Property Name="IssueType" Type="nvarchar" MaxLength="50" />
+          <Property Name="ThreadTitle" Type="ntext" />
+          <Property Name="ThreadUrl" Type="nvarchar(max)" />
+          <Property Name="AvgPageView" Type="numeric" Precision="5" Scale="2" />
+          <Property Name="Views" Type="int" />
+          <Property Name="Replies" Type="int" />
+          <Property Name="UniquePoster" Type="int" />
+          <Property Name="Subscriber" Type="int" />
+          <Property Name="Age" Type="int" />
+          <Property Name="CreateOn" Type="date" />
+          <Property Name="IRT" Type="numeric" Precision="5" Scale="2" />
+          <Property Name="LastReply" Type="date" />
+          <Property Name="Answered" Type="bit" />
+          <Property Name="AnsweredBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="ThreadType" Type="nvarchar" MaxLength="50" />
+          <Property Name="Trend" Type="nvarchar(max)" />
+          <Property Name="TrendUrl" Type="nvarchar(max)" />
+          <Property Name="CSSDone" Type="nvarchar(max)" />
+          <Property Name="CustomerNeeded" Type="nvarchar(max)" />
+          <Property Name="Difficult" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityContainer Name="AzureReportModelStoreContainer">
+          <EntitySet Name="BaseThread" EntityType="Self.BaseThread" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="AzureReportModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="AzureReportEntities" annotation:LazyLoadingEnabled="true" >
+          <EntitySet Name="BaseThreads" EntityType="AzureReportModel.BaseThread" />
+        </EntityContainer>
+        <EntityType Name="BaseThread">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" />
+          <Property Name="Rank" Type="Int32" />
+          <Property Name="WeightImpact" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="TechCategory" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IssueType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ThreadTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ThreadUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="AvgPageView" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="Views" Type="Int32" />
+          <Property Name="Replies" Type="Int32" />
+          <Property Name="UniquePoster" Type="Int32" />
+          <Property Name="Subscriber" Type="Int32" />
+          <Property Name="Age" Type="Int32" />
+          <Property Name="CreateOn" Type="DateTime" Precision="0" />
+          <Property Name="IRT" Type="Decimal" Precision="5" Scale="2" />
+          <Property Name="LastReply" Type="DateTime" Precision="0" />
+          <Property Name="Answered" Type="Boolean" />
+          <Property Name="AnsweredBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ThreadType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Trend" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="TrendUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CSSDone" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CustomerNeeded" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Difficult" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="AzureReportModelStoreContainer" CdmEntityContainer="AzureReportEntities" >
+          <EntitySetMapping Name="BaseThreads">
+            <EntityTypeMapping TypeName="AzureReportModel.BaseThread">
+              <MappingFragment StoreEntitySet="BaseThread">
+                <ScalarProperty Name="Difficult" ColumnName="Difficult" />
+                <ScalarProperty Name="CustomerNeeded" ColumnName="CustomerNeeded" />
+                <ScalarProperty Name="CSSDone" ColumnName="CSSDone" />
+                <ScalarProperty Name="TrendUrl" ColumnName="TrendUrl" />
+                <ScalarProperty Name="Trend" ColumnName="Trend" />
+                <ScalarProperty Name="ThreadType" ColumnName="ThreadType" />
+                <ScalarProperty Name="AnsweredBy" ColumnName="AnsweredBy" />
+                <ScalarProperty Name="Answered" ColumnName="Answered" />
+                <ScalarProperty Name="LastReply" ColumnName="LastReply" />
+                <ScalarProperty Name="IRT" ColumnName="IRT" />
+                <ScalarProperty Name="CreateOn" ColumnName="CreateOn" />
+                <ScalarProperty Name="Age" ColumnName="Age" />
+                <ScalarProperty Name="Subscriber" ColumnName="Subscriber" />
+                <ScalarProperty Name="UniquePoster" ColumnName="UniquePoster" />
+                <ScalarProperty Name="Replies" ColumnName="Replies" />
+                <ScalarProperty Name="Views" ColumnName="Views" />
+                <ScalarProperty Name="AvgPageView" ColumnName="AvgPageView" />
+                <ScalarProperty Name="ThreadUrl" ColumnName="ThreadUrl" />
+                <ScalarProperty Name="ThreadTitle" ColumnName="ThreadTitle" />
+                <ScalarProperty Name="IssueType" ColumnName="IssueType" />
+                <ScalarProperty Name="TechCategory" ColumnName="TechCategory" />
+                <ScalarProperty Name="WeightImpact" ColumnName="WeightImpact" />
+                <ScalarProperty Name="Rank" ColumnName="Rank" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="true" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
