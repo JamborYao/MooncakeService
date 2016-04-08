@@ -12,6 +12,9 @@ namespace MooncakeTool
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
+    using System.Data.Objects;
+    using System.Data.Objects.DataClasses;
+    using System.Linq;
     
     public partial class AzureReportEntities : DbContext
     {
@@ -26,5 +29,28 @@ namespace MooncakeTool
         }
     
         public DbSet<BaseThread> BaseThreads { get; set; }
+    
+        public virtual ObjectResult<MSDNVolumn_Result> MSDNVolumn(Nullable<System.DateTime> startdate, Nullable<System.DateTime> enddate)
+        {
+            var startdateParameter = startdate.HasValue ?
+                new ObjectParameter("startdate", startdate) :
+                new ObjectParameter("startdate", typeof(System.DateTime));
+    
+            var enddateParameter = enddate.HasValue ?
+                new ObjectParameter("enddate", enddate) :
+                new ObjectParameter("enddate", typeof(System.DateTime));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<MSDNVolumn_Result>("MSDNVolumn", startdateParameter, enddateParameter);
+        }
+    
+        public virtual ObjectResult<BaseThread> test()
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<BaseThread>("test");
+        }
+    
+        public virtual ObjectResult<BaseThread> test(MergeOption mergeOption)
+        {
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<BaseThread>("test", mergeOption);
+        }
     }
 }

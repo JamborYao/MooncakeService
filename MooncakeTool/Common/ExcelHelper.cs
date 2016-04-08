@@ -8,7 +8,7 @@ namespace MooncakeTool.Common
 {
     public class ExcelHelper
     {
-        public static ForumThreads ConvertCSVToForumThreads(string[] headers, string[] item, ForumThreads thread)
+        public static BaseThread ConvertCSVToForumThreads(string[] headers, string[] item, BaseThread thread)
         {
             if (headers.Count() != item.Count()) { throw new Exception("header.count not equal item.count"); }
             int num = 0;
@@ -21,7 +21,7 @@ namespace MooncakeTool.Common
             return thread;
         }
 
-        public static void CheckHeader(string header, string value, ForumThreads thread)
+        public static void CheckHeader(string header, string value, BaseThread thread)
         {
             switch (header)
             {
@@ -31,7 +31,7 @@ namespace MooncakeTool.Common
                     break;
                 case "Weighted Impact":
                     if (value != "")
-                        thread.WeightImpact = Convert.ToDouble(value);
+                        thread.WeightImpact = Convert.ToDecimal(value);
                     break;
                 case "Tech category ":
                     thread.TechCategory = (string)value;
@@ -48,7 +48,7 @@ namespace MooncakeTool.Common
                     break;
                 case "Avg Views per Day":
                     if (value != "")
-                        thread.AvgPageView = Convert.ToDouble(value);
+                        thread.AvgPageView = Convert.ToDecimal(value);
                     break;
                 case "Views":
                     if (value != "")
@@ -84,7 +84,7 @@ namespace MooncakeTool.Common
                     break;
                 case "Time to Initial Response":
                     if (value != "")
-                        thread.IRT = Convert.ToDouble(value);
+                        thread.IRT = Convert.ToDecimal(value);
                     break;
                 case "Last Reply":
                     if (value != "" && value != "-")

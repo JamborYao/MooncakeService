@@ -181,14 +181,19 @@
     <Compile Include="BaseThread.cs">
       <DependentUpon>AzureReport.tt</DependentUpon>
     </Compile>
+    <Compile Include="Common\BaseThreadDll.cs" />
     <Compile Include="Common\ExcelHelper.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ImportExcelController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Controllers\VolumnController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ForumThreads.cs" />
+    <Compile Include="MSDNVolumn_Result.cs">
+      <DependentUpon>AzureReport.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

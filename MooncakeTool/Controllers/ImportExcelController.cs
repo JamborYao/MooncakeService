@@ -11,7 +11,7 @@ namespace MooncakeTool.Controllers
 {
     public class ImportExcelController : ApiController
     {
-        public void Get()
+        public void Get(string id)
         { }
 
         //do the following in excel
@@ -25,7 +25,7 @@ namespace MooncakeTool.Controllers
         //      End Sub
         // 2) replace all ',' as ';'
         // Post api/<controller>
-        public void Post()
+        public void Get()
         {
             string filePath = @"D:\MooncakeData.csv";
             var csv = new List<string[]>();
@@ -34,13 +34,14 @@ namespace MooncakeTool.Controllers
             if (lines.Count() < 0) { throw new Exception("csv file line count <0"); }
             string[] headers = lines[0].Split(',');
 
-            List<MooncakeTool.Models.ForumThreads> threads = new List<Models.ForumThreads>();
+            List<BaseThread> threads = new List<BaseThread>();
             for (int i = 1; i < lines.Count(); i++)
             {
                
                 string[] item = lines[i].Split(',');
-                threads.Add(MooncakeTool.Common.ExcelHelper.ConvertCSVToForumThreads(headers, item, new MooncakeTool.Models.ForumThreads()));
+                threads.Add(MooncakeTool.Common.ExcelHelper.ConvertCSVToForumThreads(headers, item, new BaseThread()));
             }
+            Common.BaseThreadDll.InsertBatchBaseThread(threads);
         }
 
 
@@ -50,9 +51,9 @@ namespace MooncakeTool.Controllers
 
 
         // POST api/<controller>
-        //public void Post([FromBody]string value)
-        //{
-        //}
+        public void Post([FromBody]string value)
+        {
+        }
 
         // PUT api/<controller>/5
         //public void Put(int id, [FromBody]string value)

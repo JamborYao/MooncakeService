@@ -9,11 +9,11 @@
           <Key>
             <PropertyRef Name="Id" />
           </Key>
-          <Property Name="Id" Type="int" Nullable="false" />
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Rank" Type="int" />
           <Property Name="WeightImpact" Type="numeric" Precision="5" Scale="2" />
-          <Property Name="TechCategory" Type="nvarchar" MaxLength="50" />
-          <Property Name="IssueType" Type="nvarchar" MaxLength="50" />
+          <Property Name="TechCategory" Type="nvarchar(max)" />
+          <Property Name="IssueType" Type="nvarchar(max)" />
           <Property Name="ThreadTitle" Type="ntext" />
           <Property Name="ThreadUrl" Type="nvarchar(max)" />
           <Property Name="AvgPageView" Type="numeric" Precision="5" Scale="2" />
@@ -26,14 +26,19 @@
           <Property Name="IRT" Type="numeric" Precision="5" Scale="2" />
           <Property Name="LastReply" Type="date" />
           <Property Name="Answered" Type="bit" />
-          <Property Name="AnsweredBy" Type="nvarchar" MaxLength="50" />
-          <Property Name="ThreadType" Type="nvarchar" MaxLength="50" />
+          <Property Name="AnsweredBy" Type="nvarchar(max)" />
+          <Property Name="ThreadType" Type="nvarchar(max)" />
           <Property Name="Trend" Type="nvarchar(max)" />
           <Property Name="TrendUrl" Type="nvarchar(max)" />
           <Property Name="CSSDone" Type="nvarchar(max)" />
           <Property Name="CustomerNeeded" Type="nvarchar(max)" />
           <Property Name="Difficult" Type="nvarchar(max)" />
         </EntityType>
+        <Function Name="MSDNVolumn" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="startdate" Type="datetime" Mode="In" />
+          <Parameter Name="enddate" Type="datetime" Mode="In" />
+        </Function>
+        <Function Name="test" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="AzureReportModelStoreContainer">
           <EntitySet Name="BaseThread" EntityType="Self.BaseThread" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
@@ -43,6 +48,11 @@
       <Schema Namespace="AzureReportModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="AzureReportEntities" annotation:LazyLoadingEnabled="true" >
           <EntitySet Name="BaseThreads" EntityType="AzureReportModel.BaseThread" />
+          <FunctionImport Name="MSDNVolumn" ReturnType="Collection(AzureReportModel.MSDNVolumn_Result)">
+            <Parameter Name="startdate" Mode="In" Type="DateTime" />
+            <Parameter Name="enddate" Mode="In" Type="DateTime" />
+          </FunctionImport>
+          <FunctionImport Name="test" EntitySet="BaseThreads" ReturnType="Collection(AzureReportModel.BaseThread)" />
         </EntityContainer>
         <EntityType Name="BaseThread">
           <Key>
@@ -51,8 +61,8 @@
           <Property Name="Id" Type="Int32" Nullable="false" />
           <Property Name="Rank" Type="Int32" />
           <Property Name="WeightImpact" Type="Decimal" Precision="5" Scale="2" />
-          <Property Name="TechCategory" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="IssueType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TechCategory" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IssueType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ThreadTitle" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="ThreadUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="AvgPageView" Type="Decimal" Precision="5" Scale="2" />
@@ -65,14 +75,21 @@
           <Property Name="IRT" Type="Decimal" Precision="5" Scale="2" />
           <Property Name="LastReply" Type="DateTime" Precision="0" />
           <Property Name="Answered" Type="Boolean" />
-          <Property Name="AnsweredBy" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="ThreadType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AnsweredBy" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ThreadType" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Trend" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="TrendUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CSSDone" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CustomerNeeded" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Difficult" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <ComplexType Name="MSDNVolumn_Result">
+          <Property Type="Int32" Name="num" Nullable="true" />
+          <Property Type="String" Name="namemonth" Nullable="true" MaxLength="30" />
+          <Property Type="Int32" Name="valuemonth" Nullable="true" />
+          <Property Type="Int32" Name="valueyear" Nullable="true" />
+          <Property Type="String" Name="ThreadType" Nullable="true" />
+        </ComplexType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -109,6 +126,18 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <FunctionImportMapping FunctionImportName="MSDNVolumn" FunctionName="AzureReportModel.Store.MSDNVolumn">
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AzureReportModel.MSDNVolumn_Result">
+                <ScalarProperty Name="num" ColumnName="num" />
+                <ScalarProperty Name="namemonth" ColumnName="namemonth" />
+                <ScalarProperty Name="valuemonth" ColumnName="valuemonth" />
+                <ScalarProperty Name="valueyear" ColumnName="valueyear" />
+                <ScalarProperty Name="ThreadType" ColumnName="ThreadType" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
+          <FunctionImportMapping FunctionImportName="test" FunctionName="AzureReportModel.Store.test" />
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
