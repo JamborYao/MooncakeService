@@ -11,12 +11,12 @@ namespace MooncakeTool
 {
     using System;
     
-    public partial class MSDNVolumn_Result
+    public partial class sp_helpdiagrams_Result
     {
-        public string ThreadType { get; set; }
-        public Nullable<int> Num { get; set; }
-        public string NMonth { get; set; }
-        public Nullable<int> Month { get; set; }
-        public Nullable<int> Year { get; set; }
+        public string Database { get; set; }
+        public string Name { get; set; }
+        public int ID { get; set; }
+        public string Owner { get; set; }
+        public int OwnerID { get; set; }
     }
 }

@@ -10,13 +10,15 @@
 namespace MooncakeTool
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class MSDNVolumn_Result
+    public partial class SamplePlatform
     {
-        public string ThreadType { get; set; }
-        public Nullable<int> Num { get; set; }
-        public string NMonth { get; set; }
-        public Nullable<int> Month { get; set; }
-        public Nullable<int> Year { get; set; }
+        public int Id { get; set; }
+        public Nullable<int> PlatformId { get; set; }
+        public Nullable<int> SampleCodeId { get; set; }
+    
+        public virtual Platform Platform { get; set; }
+        public virtual SampleCode SampleCode { get; set; }
     }
 }

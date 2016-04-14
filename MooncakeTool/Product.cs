@@ -10,13 +10,19 @@
 namespace MooncakeTool
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class MSDNVolumn_Result
+    public partial class Product
     {
-        public string ThreadType { get; set; }
-        public Nullable<int> Num { get; set; }
-        public string NMonth { get; set; }
-        public Nullable<int> Month { get; set; }
-        public Nullable<int> Year { get; set; }
+        public Product()
+        {
+            this.SampleProducts = new HashSet<SampleProduct>();
+        }
+    
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Value { get; set; }
+    
+        public virtual ICollection<SampleProduct> SampleProducts { get; set; }
     }
 }

@@ -6,6 +6,7 @@ using System.Net.Http;
 using System.Text;
 using System.Web;
 using System.Web.Http;
+using MooncakeTool.Common;
 
 namespace MooncakeTool.Controllers
 {
@@ -17,25 +18,19 @@ namespace MooncakeTool.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET api/<controller>/5
+        [Route("api/getVolumn/{startDate}/{endDate}")]
         public HttpResponseMessage Get(string startDate, string endDate)
         {
-            HttpResponseMessage result;
-            try
-            {
-                DateTime? start = Convert.ToDateTime(startDate);
-                DateTime? end = Convert.ToDateTime(endDate);
-                List<MSDNVolumn_Result> lists = MooncakeTool.Common.BaseThreadDll.GetVolumnbyMonth(start, end);
-                string volumnJson = Newtonsoft.Json.JsonConvert.SerializeObject(lists);
-                result = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };
-            }
-            catch
-            {
-                throw new Exception("datetime is incorrect!");
-            }
-            return result;
+            Func<DateTime?, DateTime?, object> dllMethod = BaseThreadDll.GetVolumnbyMonth;
+            return BaseThreadDll.GetNumbyMonth(startDate, endDate, dllMethod);
         }
 
+        [Route("api/getPageView/{startDate}/{endDate}")]
+        public HttpResponseMessage GetPageView(string startDate, string endDate)
+        {        
+            Func<DateTime?, DateTime?, object> dllMethod = BaseThreadDll.GetPageViewbyMonth;
+            return BaseThreadDll.GetNumbyMonth(startDate, endDate, dllMethod);          
+        }
 
         // POST api/<controller>
         public void Post([FromBody]string value)

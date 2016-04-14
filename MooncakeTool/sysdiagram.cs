@@ -10,13 +10,14 @@
 namespace MooncakeTool
 {
     using System;
+    using System.Collections.Generic;
     
-    public partial class MSDNVolumn_Result
+    public partial class sysdiagram
     {
-        public string ThreadType { get; set; }
-        public Nullable<int> Num { get; set; }
-        public string NMonth { get; set; }
-        public Nullable<int> Month { get; set; }
-        public Nullable<int> Year { get; set; }
+        public string name { get; set; }
+        public int principal_id { get; set; }
+        public int diagram_id { get; set; }
+        public Nullable<int> version { get; set; }
+        public byte[] definition { get; set; }
     }
 }
