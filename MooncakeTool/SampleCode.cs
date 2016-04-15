@@ -25,6 +25,7 @@ namespace MooncakeTool
         public string Description { get; set; }
         public string Author { get; set; }
         public Nullable<System.DateTime> LastUpdate { get; set; }
+        public string GitResourceUrl { get; set; }
     
         public virtual ICollection<SamplePlatform> SamplePlatforms { get; set; }
         public virtual ICollection<SampleProduct> SampleProducts { get; set; }

@@ -131,7 +131,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\" />
     <Folder Include="Views\ImportExcel\" />
   </ItemGroup>
   <ItemGroup>
@@ -276,6 +275,7 @@
     <Content Include="AzureReport.edmx.diagram">
       <DependentUpon>AzureReport.edmx</DependentUpon>
     </Content>
+    <Content Include="App_Data\AzureReport.bak" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

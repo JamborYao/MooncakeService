@@ -49,13 +49,14 @@ namespace MooncakeTool.Common
                         var original = dbContext.SampleCodes.Where(c=>c.Description == entity.Description).FirstOrDefault();
                         if (original != null)
                         {
-                            dbContext.Entry(original).State = System.Data.EntityState.Modified;
+                            entity.Id = original.Id;
+                            dbContext.Entry(original).CurrentValues.SetValues(entity);
                         }
                     }
                     else {
                         //add               
                         dbContext.SampleCodes.Add(entity);
-                    }
+                    }                    
                     dbContext.SaveChanges();
 
                 }

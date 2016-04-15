@@ -59,6 +59,7 @@
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="Author" Type="nvarchar" MaxLength="50" />
           <Property Name="LastUpdate" Type="date" />
+          <Property Name="GitResourceUrl" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="SamplePlatform">
           <Key>
@@ -350,6 +351,7 @@
           <Property Name="LastUpdate" Type="DateTime" Precision="0" />
           <NavigationProperty Name="SamplePlatforms" Relationship="AzureReportModel.FK_SamplePlatform_SampleCode" FromRole="SampleCode" ToRole="SamplePlatform" />
           <NavigationProperty Name="SampleProducts" Relationship="AzureReportModel.FK_SampleProduct_SampleCode" FromRole="SampleCode" ToRole="SampleProduct" />
+          <Property Name="GitResourceUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="SamplePlatform">
           <Key>
@@ -533,6 +535,7 @@
           <EntitySetMapping Name="SampleCodes">
             <EntityTypeMapping TypeName="AzureReportModel.SampleCode">
               <MappingFragment StoreEntitySet="SampleCode">
+                <ScalarProperty Name="GitResourceUrl" ColumnName="GitResourceUrl" />
                 <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
                 <ScalarProperty Name="Author" ColumnName="Author" />
                 <ScalarProperty Name="Description" ColumnName="Description" />

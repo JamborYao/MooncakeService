@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text;
 using System.Web.Http;
 
 namespace MooncakeTool.Controllers
@@ -32,26 +33,25 @@ namespace MooncakeTool.Controllers
             int num = 1;
             do
             {
-                string url = string.Format(sampleCodeUrl, num);
-                HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(url);
-                request.Method = "GET";
-                HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-                Stream stream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(stream);
-                body = reader.ReadToEnd();
-                if (body.IndexOf("unable to find any samples") > 0) break;
-                HtmlAgilityHelper.HtmlToEntity(body, ref samples);
-
-               
-                response.Close();
-                reader.Close();
+                HtmlAgilityHelper.HtmlToEntity(HtmlAgilityHelper.GetOnePageHtml(num), ref samples,ref num);
                 num++;
             }
-            while (true);
+            while (num>0);
+
             SampleCodeDll.BatchInsertSampleCode(samples);
 
         }
+        [Route("api/getSamples/{num}")]
+        public HttpResponseMessage GetSampleCodeViaPage(int num)
+        {
+            List<SampleCode> samples = new List<SampleCode>();
+            HttpResponseMessage result;
+            HtmlAgilityHelper.HtmlToEntity(HtmlAgilityHelper.GetOnePageHtml(num), ref samples, ref num);
+            string volumnJson = Newtonsoft.Json.JsonConvert.SerializeObject(samples);
+            result = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };           
+            return result;
 
+        }
 
         // POST api/<controller>
         public void Post([FromBody]string value)
