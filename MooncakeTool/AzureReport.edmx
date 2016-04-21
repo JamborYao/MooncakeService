@@ -34,6 +34,58 @@
           <Property Name="CustomerNeeded" Type="nvarchar(max)" />
           <Property Name="Difficult" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="GitHubCommit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CreateAt" Type="date" />
+          <Property Name="Committer" Type="nvarchar" MaxLength="50" />
+          <Property Name="Message" Type="nvarchar(max)" />
+          <Property Name="Sha" Type="nvarchar(max)" />
+          <Property Name="PSha" Type="nvarchar(max)" />
+          <Property Name="GitCodeId" Type="int" />
+          <Property Name="Html_Url" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="GitHubIssue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GitCodeId" Type="int" />
+          <Property Name="Title" Type="nvarchar(max)" />
+          <Property Name="Body" Type="nvarchar(max)" />
+          <Property Name="IssueUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreateAt" Type="date" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
+          <Property Name="Number" Type="int" />
+          <Property Name="CloseAt" Type="date" />
+          <Property Name="UpdateAt" Type="date" />
+          <Property Name="Html_Url" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityType Name="GitHubPullRequest">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Title" Type="nvarchar(max)" />
+          <Property Name="Body" Type="nvarchar(max)" />
+          <Property Name="Html_Url" Type="nvarchar(max)" />
+          <Property Name="CreateAt" Type="date" />
+          <Property Name="Number" Type="int" />
+          <Property Name="State" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdateAt" Type="date" />
+          <Property Name="GitCodeId" Type="int" />
+        </EntityType>
+        <EntityType Name="History">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="HistoryType" Type="nvarchar" MaxLength="50" />
+          <Property Name="ForeignId" Type="int" />
+          <Property Name="IsHistory" Type="bit" />
+        </EntityType>
         <EntityType Name="Platform">
           <Key>
             <PropertyRef Name="Id" />
@@ -41,6 +93,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Value" Type="nvarchar" MaxLength="50" />
+          <Property Name="CName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="Product">
           <Key>
@@ -49,6 +102,7 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Value" Type="nvarchar" MaxLength="50" />
+          <Property Name="CName" Type="nvarchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="SampleCode">
           <Key>
@@ -87,6 +141,42 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <Association Name="FK_GitCommit_SampleCode">
+          <End Role="SampleCode" Type="Self.SampleCode" Multiplicity="0..1" />
+          <End Role="GitHubCommit" Type="Self.GitHubCommit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SampleCode">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GitHubCommit">
+              <PropertyRef Name="GitCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GitIssue_SampleCode">
+          <End Role="SampleCode" Type="Self.SampleCode" Multiplicity="0..1" />
+          <End Role="GitHubIssue" Type="Self.GitHubIssue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SampleCode">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GitHubIssue">
+              <PropertyRef Name="GitCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GitPull_SampleCode">
+          <End Role="SampleCode" Type="Self.SampleCode" Multiplicity="0..1" />
+          <End Role="GitHubPullRequest" Type="Self.GitHubPullRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SampleCode">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GitHubPullRequest">
+              <PropertyRef Name="GitCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SamplePlatform_Platform">
           <End Role="Platform" Type="Self.Platform" Multiplicity="0..1" />
           <End Role="SamplePlatform" Type="Self.SamplePlatform" Multiplicity="*" />
@@ -177,12 +267,28 @@
         <Function Name="test" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="AzureReportModelStoreContainer">
           <EntitySet Name="BaseThread" EntityType="Self.BaseThread" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GitHubCommit" EntityType="Self.GitHubCommit" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GitHubIssue" EntityType="Self.GitHubIssue" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GitHubPullRequest" EntityType="Self.GitHubPullRequest" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="History" EntityType="Self.History" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Platform" EntityType="Self.Platform" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Product" EntityType="Self.Product" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SampleCode" EntityType="Self.SampleCode" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SamplePlatform" EntityType="Self.SamplePlatform" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SampleProduct" EntityType="Self.SampleProduct" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_GitCommit_SampleCode" Association="Self.FK_GitCommit_SampleCode">
+            <End Role="SampleCode" EntitySet="SampleCode" />
+            <End Role="GitHubCommit" EntitySet="GitHubCommit" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GitIssue_SampleCode" Association="Self.FK_GitIssue_SampleCode">
+            <End Role="SampleCode" EntitySet="SampleCode" />
+            <End Role="GitHubIssue" EntitySet="GitHubIssue" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GitPull_SampleCode" Association="Self.FK_GitPull_SampleCode">
+            <End Role="SampleCode" EntitySet="SampleCode" />
+            <End Role="GitHubPullRequest" EntitySet="GitHubPullRequest" />
+          </AssociationSet>
           <AssociationSet Name="FK_SamplePlatform_Platform" Association="Self.FK_SamplePlatform_Platform">
             <End Role="Platform" EntitySet="Platform" />
             <End Role="SamplePlatform" EntitySet="SamplePlatform" />
@@ -245,12 +351,28 @@
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
           <EntitySet Name="BaseThreads" EntityType="AzureReportModel.BaseThread" />
+          <EntitySet Name="GitHubCommits" EntityType="AzureReportModel.GitHubCommit" />
+          <EntitySet Name="GitHubIssues" EntityType="AzureReportModel.GitHubIssue" />
+          <EntitySet Name="GitHubPullRequests" EntityType="AzureReportModel.GitHubPullRequest" />
+          <EntitySet Name="Histories" EntityType="AzureReportModel.History" />
           <EntitySet Name="Platforms" EntityType="AzureReportModel.Platform" />
           <EntitySet Name="Products" EntityType="AzureReportModel.Product" />
           <EntitySet Name="SampleCodes" EntityType="AzureReportModel.SampleCode" />
           <EntitySet Name="SamplePlatforms" EntityType="AzureReportModel.SamplePlatform" />
           <EntitySet Name="SampleProducts" EntityType="AzureReportModel.SampleProduct" />
           <EntitySet Name="sysdiagrams" EntityType="AzureReportModel.sysdiagram" />
+          <AssociationSet Name="FK_GitCommit_SampleCode" Association="AzureReportModel.FK_GitCommit_SampleCode">
+            <End Role="SampleCode" EntitySet="SampleCodes" />
+            <End Role="GitHubCommit" EntitySet="GitHubCommits" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GitIssue_SampleCode" Association="AzureReportModel.FK_GitIssue_SampleCode">
+            <End Role="SampleCode" EntitySet="SampleCodes" />
+            <End Role="GitHubIssue" EntitySet="GitHubIssues" />
+          </AssociationSet>
+          <AssociationSet Name="FK_GitPull_SampleCode" Association="AzureReportModel.FK_GitPull_SampleCode">
+            <End Role="SampleCode" EntitySet="SampleCodes" />
+            <End Role="GitHubPullRequest" EntitySet="GitHubPullRequests" />
+          </AssociationSet>
           <AssociationSet Name="FK_SamplePlatform_Platform" Association="AzureReportModel.FK_SamplePlatform_Platform">
             <End Role="Platform" EntitySet="Platforms" />
             <End Role="SamplePlatform" EntitySet="SamplePlatforms" />
@@ -322,6 +444,61 @@
           <Property Name="CustomerNeeded" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Difficult" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="GitHubCommit">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CreateAt" Type="DateTime" Precision="0" />
+          <Property Name="Committer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Sha" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="PSha" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="GitCodeId" Type="Int32" />
+          <Property Name="Html_Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SampleCode" Relationship="AzureReportModel.FK_GitCommit_SampleCode" FromRole="GitHubCommit" ToRole="SampleCode" />
+        </EntityType>
+        <EntityType Name="GitHubIssue">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GitCodeId" Type="Int32" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="IssueUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Precision="0" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Number" Type="Int32" />
+          <Property Name="CloseAt" Type="DateTime" Precision="0" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="0" />
+          <Property Name="Html_Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="SampleCode" Relationship="AzureReportModel.FK_GitIssue_SampleCode" FromRole="GitHubIssue" ToRole="SampleCode" />
+        </EntityType>
+        <EntityType Name="GitHubPullRequest">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Html_Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Precision="0" />
+          <Property Name="Number" Type="Int32" />
+          <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="0" />
+          <Property Name="GitCodeId" Type="Int32" />
+          <NavigationProperty Name="SampleCode" Relationship="AzureReportModel.FK_GitPull_SampleCode" FromRole="GitHubPullRequest" ToRole="SampleCode" />
+        </EntityType>
+        <EntityType Name="History">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="HistoryType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ForeignId" Type="Int32" />
+          <Property Name="IsHistory" Type="Boolean" />
+        </EntityType>
         <EntityType Name="Platform">
           <Key>
             <PropertyRef Name="Id" />
@@ -329,6 +506,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="SamplePlatforms" Relationship="AzureReportModel.FK_SamplePlatform_Platform" FromRole="Platform" ToRole="SamplePlatform" />
         </EntityType>
         <EntityType Name="Product">
@@ -338,6 +516,7 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Value" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="SampleProducts" Relationship="AzureReportModel.FK_SampleProduct_Product" FromRole="Product" ToRole="SampleProduct" />
         </EntityType>
         <EntityType Name="SampleCode">
@@ -349,9 +528,12 @@
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Author" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LastUpdate" Type="DateTime" Precision="0" />
+          <Property Name="GitResourceUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="GitHubCommits" Relationship="AzureReportModel.FK_GitCommit_SampleCode" FromRole="SampleCode" ToRole="GitHubCommit" />
+          <NavigationProperty Name="GitHubIssues" Relationship="AzureReportModel.FK_GitIssue_SampleCode" FromRole="SampleCode" ToRole="GitHubIssue" />
+          <NavigationProperty Name="GitHubPullRequests" Relationship="AzureReportModel.FK_GitPull_SampleCode" FromRole="SampleCode" ToRole="GitHubPullRequest" />
           <NavigationProperty Name="SamplePlatforms" Relationship="AzureReportModel.FK_SamplePlatform_SampleCode" FromRole="SampleCode" ToRole="SamplePlatform" />
           <NavigationProperty Name="SampleProducts" Relationship="AzureReportModel.FK_SampleProduct_SampleCode" FromRole="SampleCode" ToRole="SampleProduct" />
-          <Property Name="GitResourceUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="SamplePlatform">
           <Key>
@@ -383,6 +565,42 @@
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
+        <Association Name="FK_GitCommit_SampleCode">
+          <End Type="AzureReportModel.SampleCode" Role="SampleCode" Multiplicity="0..1" />
+          <End Type="AzureReportModel.GitHubCommit" Role="GitHubCommit" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SampleCode">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GitHubCommit">
+              <PropertyRef Name="GitCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GitIssue_SampleCode">
+          <End Type="AzureReportModel.SampleCode" Role="SampleCode" Multiplicity="0..1" />
+          <End Type="AzureReportModel.GitHubIssue" Role="GitHubIssue" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SampleCode">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GitHubIssue">
+              <PropertyRef Name="GitCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_GitPull_SampleCode">
+          <End Type="AzureReportModel.SampleCode" Role="SampleCode" Multiplicity="0..1" />
+          <End Type="AzureReportModel.GitHubPullRequest" Role="GitHubPullRequest" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SampleCode">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="GitHubPullRequest">
+              <PropertyRef Name="GitCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_SamplePlatform_Platform">
           <End Type="AzureReportModel.Platform" Role="Platform" Multiplicity="0..1" />
           <End Type="AzureReportModel.SamplePlatform" Role="SamplePlatform" Multiplicity="*" />
@@ -514,9 +732,66 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
+          <EntitySetMapping Name="GitHubCommits">
+            <EntityTypeMapping TypeName="AzureReportModel.GitHubCommit">
+              <MappingFragment StoreEntitySet="GitHubCommit">
+                <ScalarProperty Name="Html_Url" ColumnName="Html_Url" />
+                <ScalarProperty Name="GitCodeId" ColumnName="GitCodeId" />
+                <ScalarProperty Name="PSha" ColumnName="PSha" />
+                <ScalarProperty Name="Sha" ColumnName="Sha" />
+                <ScalarProperty Name="Message" ColumnName="Message" />
+                <ScalarProperty Name="Committer" ColumnName="Committer" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GitHubIssues">
+            <EntityTypeMapping TypeName="AzureReportModel.GitHubIssue">
+              <MappingFragment StoreEntitySet="GitHubIssue">
+                <ScalarProperty Name="Html_Url" ColumnName="Html_Url" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="CloseAt" ColumnName="CloseAt" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="IssueUser" ColumnName="IssueUser" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="GitCodeId" ColumnName="GitCodeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GitHubPullRequests">
+            <EntityTypeMapping TypeName="AzureReportModel.GitHubPullRequest">
+              <MappingFragment StoreEntitySet="GitHubPullRequest">
+                <ScalarProperty Name="GitCodeId" ColumnName="GitCodeId" />
+                <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="Number" ColumnName="Number" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="Html_Url" ColumnName="Html_Url" />
+                <ScalarProperty Name="Body" ColumnName="Body" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Histories">
+            <EntityTypeMapping TypeName="AzureReportModel.History">
+              <MappingFragment StoreEntitySet="History">
+                <ScalarProperty Name="IsHistory" ColumnName="IsHistory" />
+                <ScalarProperty Name="ForeignId" ColumnName="ForeignId" />
+                <ScalarProperty Name="HistoryType" ColumnName="HistoryType" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
           <EntitySetMapping Name="Platforms">
             <EntityTypeMapping TypeName="AzureReportModel.Platform">
               <MappingFragment StoreEntitySet="Platform">
+                <ScalarProperty Name="CName" ColumnName="CName" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
@@ -526,6 +801,7 @@
           <EntitySetMapping Name="Products">
             <EntityTypeMapping TypeName="AzureReportModel.Product">
               <MappingFragment StoreEntitySet="Product">
+                <ScalarProperty Name="CName" ColumnName="CName" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Id" ColumnName="Id" />

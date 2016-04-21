@@ -22,6 +22,7 @@ namespace MooncakeTool
         public int Id { get; set; }
         public string Name { get; set; }
         public string Value { get; set; }
+        public string CName { get; set; }
     
         public virtual ICollection<SampleProduct> SampleProducts { get; set; }
     }

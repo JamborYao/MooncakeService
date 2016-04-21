@@ -4,37 +4,22 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using MooncakeTool.Common;
 
 namespace MooncakeTool.Controllers
 {
     public class GitHubController : ApiController
     {
-        private string adfafd;
-        // GET api/<controller>
         public IEnumerable<string> Get()
         {
+           // GitHubDeveloper.GetGitHubPullEntity();
             return new string[] { "value1", "value2" };
         }
-
-        // GET api/<controller>/5
-        public string Get(int id)
+        [Route("api/test1")]
+        [HttpGet]
+        public void Test()
         {
-            return "value";
-        }
-
-        // POST api/<controller>
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/<controller>/5
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/<controller>/5
-        public void Delete(int id)
-        {
+            //GitHubDeveloper.GetGitHubPullEntity();
         }
     }
 }

@@ -16,6 +16,9 @@ namespace MooncakeTool
     {
         public SampleCode()
         {
+            this.GitHubCommits = new HashSet<GitHubCommit>();
+            this.GitHubIssues = new HashSet<GitHubIssue>();
+            this.GitHubPullRequests = new HashSet<GitHubPullRequest>();
             this.SamplePlatforms = new HashSet<SamplePlatform>();
             this.SampleProducts = new HashSet<SampleProduct>();
         }
@@ -27,6 +30,9 @@ namespace MooncakeTool
         public Nullable<System.DateTime> LastUpdate { get; set; }
         public string GitResourceUrl { get; set; }
     
+        public virtual ICollection<GitHubCommit> GitHubCommits { get; set; }
+        public virtual ICollection<GitHubIssue> GitHubIssues { get; set; }
+        public virtual ICollection<GitHubPullRequest> GitHubPullRequests { get; set; }
         public virtual ICollection<SamplePlatform> SamplePlatforms { get; set; }
         public virtual ICollection<SampleProduct> SampleProducts { get; set; }
     }

@@ -12,18 +12,11 @@ namespace MooncakeTool
     using System;
     using System.Collections.Generic;
     
-    public partial class Platform
+    public partial class History
     {
-        public Platform()
-        {
-            this.SamplePlatforms = new HashSet<SamplePlatform>();
-        }
-    
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Value { get; set; }
-        public string CName { get; set; }
-    
-        public virtual ICollection<SamplePlatform> SamplePlatforms { get; set; }
+        public string HistoryType { get; set; }
+        public Nullable<int> ForeignId { get; set; }
+        public Nullable<bool> IsHistory { get; set; }
     }
 }

@@ -10,6 +10,9 @@ using MooncakeTool.Common;
 
 namespace MooncakeTool.Controllers
 {
+    /// <summary>
+    /// used to report
+    /// </summary>
     public class VolumnController : ApiController
     {
         // GET api/<controller>

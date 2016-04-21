@@ -12,18 +12,17 @@ namespace MooncakeTool
     using System;
     using System.Collections.Generic;
     
-    public partial class Platform
+    public partial class GitHubCommit
     {
-        public Platform()
-        {
-            this.SamplePlatforms = new HashSet<SamplePlatform>();
-        }
-    
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Value { get; set; }
-        public string CName { get; set; }
+        public Nullable<System.DateTime> CreateAt { get; set; }
+        public string Committer { get; set; }
+        public string Message { get; set; }
+        public string Sha { get; set; }
+        public string PSha { get; set; }
+        public Nullable<int> GitCodeId { get; set; }
+        public string Html_Url { get; set; }
     
-        public virtual ICollection<SamplePlatform> SamplePlatforms { get; set; }
+        public virtual SampleCode SampleCode { get; set; }
     }
 }

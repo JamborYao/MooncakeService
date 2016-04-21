@@ -13,7 +13,7 @@ namespace MooncakeTool
     
     public partial class MSDNPageView_Result
     {
-        public Nullable<int> Num { get; set; } 
+        public Nullable<int> Num { get; set; }
         public string NMonth { get; set; }
         public Nullable<int> Month { get; set; }
         public Nullable<int> Year { get; set; }
