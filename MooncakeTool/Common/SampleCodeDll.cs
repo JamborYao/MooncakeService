@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MooncakeTool.Models;
+using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
@@ -20,6 +21,14 @@ namespace MooncakeTool.Common
             if (platform == null) throw new Exception("did not find platform from Platfrom table!");
             return platform.Id;
         }
+
+        public static string FindPlatformNamebyId(int? id)
+        {
+            AzureReportEntities dbContext = new AzureReportEntities();
+            var platform = dbContext.Platforms.Where(x => x.Id == id).FirstOrDefault();
+            if (platform == null) throw new Exception("did not find platform from Platfrom table!");
+            return platform.Name;
+        }
         /// <summary>
         /// find product id by name
         /// </summary>
@@ -32,6 +41,14 @@ namespace MooncakeTool.Common
             if (product == null) throw new Exception("did not find platform from Platfrom table!");
             return product.Id;
         }
+
+        public static string FindProductNamebyId(int? id)
+        {
+            AzureReportEntities dbContext = new AzureReportEntities();
+            var product = dbContext.Products.Where(x => x.Id == id).FirstOrDefault();
+            if (product == null) throw new Exception("did not find platform from Platfrom table!");
+            return product.Name;
+        }
         /// <summary>
         /// insert one sample code entity
         /// </summary>
@@ -42,7 +59,7 @@ namespace MooncakeTool.Common
             AzureReportEntities dbContext = new AzureReportEntities();
             try
             {
-                var result = dbContext.SampleCodes.Where(c=>c.Description==entity.Description);
+                var result = dbContext.SampleCodes.Where(c => c.Description == entity.Description);
                 if (result != null) return false;
                 dbContext.SampleCodes.Add(entity);
                 dbContext.SaveChanges();
@@ -164,5 +181,48 @@ namespace MooncakeTool.Common
                 }
             });
         }
+
+        public static List<CardModel> GetCardInfo(int page)
+        {
+            AzureReportEntities dbContext = new AzureReportEntities();
+            var result = dbContext.SampleCodes.OrderBy(c => c.Id).Skip(page - 1).Take(numberEachPage);
+            List<CardModel> cards = new List<CardModel>();
+            foreach (var item in result)
+            {
+                CardModel card = new CardModel();
+                card.Title = item.Title;
+                card.Description = item.Description;
+                foreach (var c in item.SamplePlatforms)
+                {
+                    card.Platforms = new List<string>();
+                    card.Platforms.Add(FindPlatformNamebyId(c.PlatformId));
+                }
+                foreach (var c in item.SampleProducts)
+                {
+                    card.Products = new List<string>();
+                    card.Products.Add(FindProductNamebyId(c.ProductId));
+                }
+                card.Author = item.Author;
+                card.Link = item.GitResourceUrl;
+                cards.Add(card);
+            }
+            return cards;
+        }
+
+        public static int[] GetTotalSampleNumber()
+        {
+            AzureReportEntities dbContext = new AzureReportEntities();
+
+            var numbers = dbContext.SampleCodes.Count();
+            var total = Convert.ToInt16(Math.Ceiling(((decimal)numbers / (decimal)numberEachPage)));
+
+            int[] array = new int[total];
+            for (int i = 0; i < total; i++)
+            {
+                array[i] = i;
+            }
+            return array;
+        }
+        private static int numberEachPage = 18;
     }
 }
