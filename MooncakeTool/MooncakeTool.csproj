@@ -193,10 +193,14 @@
       <DependentUpon>AzureReport.tt</DependentUpon>
     </Compile>
     <Compile Include="Common\BaseThreadDll.cs" />
+    <Compile Include="Common\CommitDll.cs" />
     <Compile Include="Common\ExcelHelper.cs" />
     <Compile Include="Common\GitHubDeveloper.cs" />
+    <Compile Include="Common\HistoryDll.cs" />
     <Compile Include="Common\HtmlAgilityHelper.cs" />
     <Compile Include="Common\HttpRequestHelper.cs" />
+    <Compile Include="Common\PlatformDll.cs" />
+    <Compile Include="Common\ProductDll.cs" />
     <Compile Include="Common\SampleCodeDll.cs" />
     <Compile Include="Controllers\GitHubController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -299,6 +303,7 @@
       <DependentUpon>AzureReport.edmx</DependentUpon>
     </Content>
     <Content Include="App_Data\AzureReport.bak" />
+    <None Include="Properties\PublishProfiles\mooncakeTool.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

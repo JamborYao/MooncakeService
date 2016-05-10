@@ -46,6 +46,7 @@
           <Property Name="PSha" Type="nvarchar(max)" />
           <Property Name="GitCodeId" Type="int" />
           <Property Name="Html_Url" Type="nvarchar(max)" />
+          <Property Name="IsNew" Type="bit" />
         </EntityType>
         <EntityType Name="GitHubIssue">
           <Key>
@@ -62,6 +63,7 @@
           <Property Name="CloseAt" Type="date" />
           <Property Name="UpdateAt" Type="date" />
           <Property Name="Html_Url" Type="nvarchar(max)" />
+          <Property Name="IsNew" Type="bit" />
         </EntityType>
         <EntityType Name="GitHubPullRequest">
           <Key>
@@ -76,6 +78,7 @@
           <Property Name="State" Type="nvarchar" MaxLength="50" />
           <Property Name="UpdateAt" Type="date" />
           <Property Name="GitCodeId" Type="int" />
+          <Property Name="IsNew" Type="bit" />
         </EntityType>
         <EntityType Name="History">
           <Key>
@@ -85,6 +88,7 @@
           <Property Name="HistoryType" Type="nvarchar" MaxLength="50" />
           <Property Name="ForeignId" Type="int" />
           <Property Name="IsHistory" Type="bit" />
+          <Property Name="GitCodeId" Type="int" />
         </EntityType>
         <EntityType Name="Platform">
           <Key>
@@ -114,6 +118,8 @@
           <Property Name="Author" Type="nvarchar" MaxLength="50" />
           <Property Name="LastUpdate" Type="date" />
           <Property Name="GitResourceUrl" Type="nvarchar(max)" />
+          <Property Name="CreateAt" Type="date" />
+          <Property Name="CustomAt" Type="date" />
         </EntityType>
         <EntityType Name="SamplePlatform">
           <Key>
@@ -457,6 +463,7 @@
           <Property Name="GitCodeId" Type="Int32" />
           <Property Name="Html_Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="SampleCode" Relationship="AzureReportModel.FK_GitCommit_SampleCode" FromRole="GitHubCommit" ToRole="SampleCode" />
+          <Property Name="IsNew" Type="Boolean" />
         </EntityType>
         <EntityType Name="GitHubIssue">
           <Key>
@@ -474,6 +481,7 @@
           <Property Name="UpdateAt" Type="DateTime" Precision="0" />
           <Property Name="Html_Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="SampleCode" Relationship="AzureReportModel.FK_GitIssue_SampleCode" FromRole="GitHubIssue" ToRole="SampleCode" />
+          <Property Name="IsNew" Type="Boolean" />
         </EntityType>
         <EntityType Name="GitHubPullRequest">
           <Key>
@@ -489,6 +497,7 @@
           <Property Name="UpdateAt" Type="DateTime" Precision="0" />
           <Property Name="GitCodeId" Type="Int32" />
           <NavigationProperty Name="SampleCode" Relationship="AzureReportModel.FK_GitPull_SampleCode" FromRole="GitHubPullRequest" ToRole="SampleCode" />
+          <Property Name="IsNew" Type="Boolean" />
         </EntityType>
         <EntityType Name="History">
           <Key>
@@ -498,6 +507,7 @@
           <Property Name="HistoryType" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="ForeignId" Type="Int32" />
           <Property Name="IsHistory" Type="Boolean" />
+          <Property Name="GitCodeId" Type="Int32" />
         </EntityType>
         <EntityType Name="Platform">
           <Key>
@@ -529,6 +539,8 @@
           <Property Name="Author" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="LastUpdate" Type="DateTime" Precision="0" />
           <Property Name="GitResourceUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="CreateAt" Type="DateTime" Precision="0" />
+          <Property Name="CustomAt" Type="DateTime" Precision="0" />
           <NavigationProperty Name="GitHubCommits" Relationship="AzureReportModel.FK_GitCommit_SampleCode" FromRole="SampleCode" ToRole="GitHubCommit" />
           <NavigationProperty Name="GitHubIssues" Relationship="AzureReportModel.FK_GitIssue_SampleCode" FromRole="SampleCode" ToRole="GitHubIssue" />
           <NavigationProperty Name="GitHubPullRequests" Relationship="AzureReportModel.FK_GitPull_SampleCode" FromRole="SampleCode" ToRole="GitHubPullRequest" />
@@ -735,6 +747,7 @@
           <EntitySetMapping Name="GitHubCommits">
             <EntityTypeMapping TypeName="AzureReportModel.GitHubCommit">
               <MappingFragment StoreEntitySet="GitHubCommit">
+                <ScalarProperty Name="IsNew" ColumnName="IsNew" />
                 <ScalarProperty Name="Html_Url" ColumnName="Html_Url" />
                 <ScalarProperty Name="GitCodeId" ColumnName="GitCodeId" />
                 <ScalarProperty Name="PSha" ColumnName="PSha" />
@@ -749,6 +762,7 @@
           <EntitySetMapping Name="GitHubIssues">
             <EntityTypeMapping TypeName="AzureReportModel.GitHubIssue">
               <MappingFragment StoreEntitySet="GitHubIssue">
+                <ScalarProperty Name="IsNew" ColumnName="IsNew" />
                 <ScalarProperty Name="Html_Url" ColumnName="Html_Url" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="CloseAt" ColumnName="CloseAt" />
@@ -766,6 +780,7 @@
           <EntitySetMapping Name="GitHubPullRequests">
             <EntityTypeMapping TypeName="AzureReportModel.GitHubPullRequest">
               <MappingFragment StoreEntitySet="GitHubPullRequest">
+                <ScalarProperty Name="IsNew" ColumnName="IsNew" />
                 <ScalarProperty Name="GitCodeId" ColumnName="GitCodeId" />
                 <ScalarProperty Name="UpdateAt" ColumnName="UpdateAt" />
                 <ScalarProperty Name="State" ColumnName="State" />
@@ -781,6 +796,7 @@
           <EntitySetMapping Name="Histories">
             <EntityTypeMapping TypeName="AzureReportModel.History">
               <MappingFragment StoreEntitySet="History">
+                <ScalarProperty Name="GitCodeId" ColumnName="GitCodeId" />
                 <ScalarProperty Name="IsHistory" ColumnName="IsHistory" />
                 <ScalarProperty Name="ForeignId" ColumnName="ForeignId" />
                 <ScalarProperty Name="HistoryType" ColumnName="HistoryType" />
@@ -811,6 +827,8 @@
           <EntitySetMapping Name="SampleCodes">
             <EntityTypeMapping TypeName="AzureReportModel.SampleCode">
               <MappingFragment StoreEntitySet="SampleCode">
+                <ScalarProperty Name="CustomAt" ColumnName="CustomAt" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
                 <ScalarProperty Name="GitResourceUrl" ColumnName="GitResourceUrl" />
                 <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
                 <ScalarProperty Name="Author" ColumnName="Author" />

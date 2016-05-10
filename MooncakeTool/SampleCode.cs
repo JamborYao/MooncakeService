@@ -29,6 +29,8 @@ namespace MooncakeTool
         public string Author { get; set; }
         public Nullable<System.DateTime> LastUpdate { get; set; }
         public string GitResourceUrl { get; set; }
+        public Nullable<System.DateTime> CreateAt { get; set; }
+        public Nullable<System.DateTime> CustomAt { get; set; }
     
         public virtual ICollection<GitHubCommit> GitHubCommits { get; set; }
         public virtual ICollection<GitHubIssue> GitHubIssues { get; set; }

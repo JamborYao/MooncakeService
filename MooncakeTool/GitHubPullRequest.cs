@@ -23,6 +23,7 @@ namespace MooncakeTool
         public string State { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public Nullable<int> GitCodeId { get; set; }
+        public Nullable<bool> IsNew { get; set; }
     
         public virtual SampleCode SampleCode { get; set; }
     }

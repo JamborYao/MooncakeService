@@ -22,6 +22,7 @@ namespace MooncakeTool
         public string PSha { get; set; }
         public Nullable<int> GitCodeId { get; set; }
         public string Html_Url { get; set; }
+        public Nullable<bool> IsNew { get; set; }
     
         public virtual SampleCode SampleCode { get; set; }
     }

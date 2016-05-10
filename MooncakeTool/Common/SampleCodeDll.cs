@@ -9,46 +9,8 @@ namespace MooncakeTool.Common
 {
     public class SampleCodeDll
     {
-        /// <summary>
-        /// find platform id from name
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static int FindPlatformIDbyName(string name)
-        {
-            AzureReportEntities dbContext = new AzureReportEntities();
-            var platform = dbContext.Platforms.Where(x => x.Name == name).FirstOrDefault();
-            if (platform == null) throw new Exception("did not find platform from Platfrom table!");
-            return platform.Id;
-        }
 
-        public static string FindPlatformNamebyId(int? id)
-        {
-            AzureReportEntities dbContext = new AzureReportEntities();
-            var platform = dbContext.Platforms.Where(x => x.Id == id).FirstOrDefault();
-            if (platform == null) throw new Exception("did not find platform from Platfrom table!");
-            return platform.Name;
-        }
-        /// <summary>
-        /// find product id by name
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        public static int FindProductIDbyName(string name)
-        {
-            AzureReportEntities dbContext = new AzureReportEntities();
-            var product = dbContext.Products.Where(x => x.Name == name).FirstOrDefault();
-            if (product == null) throw new Exception("did not find platform from Platfrom table!");
-            return product.Id;
-        }
 
-        public static string FindProductNamebyId(int? id)
-        {
-            AzureReportEntities dbContext = new AzureReportEntities();
-            var product = dbContext.Products.Where(x => x.Id == id).FirstOrDefault();
-            if (product == null) throw new Exception("did not find platform from Platfrom table!");
-            return product.Name;
-        }
         /// <summary>
         /// insert one sample code entity
         /// </summary>
@@ -92,18 +54,21 @@ namespace MooncakeTool.Common
                         {
                             entity.Id = original.Id;
                             //update gipull table if exist update, else add
-                            UpdateGitPull(entity, original, dbContext);
-                            UpdateGitIssue(entity, original, dbContext);
-                            UpdateGitCommit(entity, original, dbContext);
+                            AddOrUpdateGitPull(entity, original, dbContext);
+                            AddOrUpdateGitIssue(entity, original, dbContext);
+                            AddOrUpdateGitCommit(entity, original, dbContext);
                             dbContext.Entry(original).CurrentValues.SetValues(entity);
                         }
                     }
                     else {
                         //add               
                         dbContext.SampleCodes.Add(entity);
+                        AddOrUpdateGitPull(entity, null, dbContext);
+                        AddOrUpdateGitIssue(entity, null, dbContext);
+                        AddOrUpdateGitCommit(entity, null, dbContext);
                     }
                     dbContext.SaveChanges();
-
+                   //' CommitDll.FindAllIsNewEntity();
                 }
 
                 return true;
@@ -130,51 +95,76 @@ namespace MooncakeTool.Common
         /// if gitpull table has item update it, if not exist add
         /// </summary>
         /// <param name="entity">new sample code object</param>
-        /// <param name="original">database sample code object</param>
+        /// <param name="original">database sample code object, if no original add directory</param>
         /// <param name="dbContext"></param>
-        public static void UpdateGitPull(SampleCode entity, SampleCode original, AzureReportEntities dbContext)
+        public static void AddOrUpdateGitPull(SampleCode entity, SampleCode original, AzureReportEntities dbContext)
         {
             entity.GitHubPullRequests.ToList<GitHubPullRequest>().ForEach((p) =>
             {
-                p.GitCodeId = original.Id;
-                if (original.GitHubPullRequests.Any(c => c.Title == p.Title))
+                if (original != null)
                 {
-                    var updatepull = original.GitHubPullRequests.Where(c => c.Title == p.Title).FirstOrDefault();
-                    p.Id = updatepull.Id;
-                    dbContext.Entry(updatepull).CurrentValues.SetValues(p);
+                    p.GitCodeId = original.Id;
+                    if (original.GitHubPullRequests.Any(c => c.Title == p.Title))
+                    {
+                        var updatepull = original.GitHubPullRequests.Where(c => c.Title == p.Title).FirstOrDefault();
+                        p.Id = updatepull.Id;
+                        dbContext.Entry(updatepull).CurrentValues.SetValues(p);
+                    }
+                    else {
+                        p.IsNew = true;
+                        // log new git pull to history table
+                        dbContext.Entry(p).State = System.Data.EntityState.Added;
+                        
+                    }
                 }
                 else {
+                    //p.IsNew = true;
                     dbContext.Entry(p).State = System.Data.EntityState.Added;
                 }
             });
         }
 
-        public static void UpdateGitIssue(SampleCode entity, SampleCode original, AzureReportEntities dbContext)
+        public static void AddOrUpdateGitIssue(SampleCode entity, SampleCode original, AzureReportEntities dbContext)
         {
             entity.GitHubIssues.ToList<GitHubIssue>().ForEach((p) =>
             {
-                p.GitCodeId = original.Id;
-                if (original.GitHubIssues.Any(c => c.Title == p.Title))
+                if (original != null)
                 {
-                    var updatepull = original.GitHubIssues.Where(c => c.Title == p.Title).FirstOrDefault();
-                    p.Id = updatepull.Id;
-                    dbContext.Entry(updatepull).CurrentValues.SetValues(p);
+                    p.GitCodeId = original.Id;
+                    if (original.GitHubIssues.Any(c => c.Title == p.Title))
+                    {
+                        var updatepull = original.GitHubIssues.Where(c => c.Title == p.Title).FirstOrDefault();
+                        p.Id = updatepull.Id;
+                        dbContext.Entry(updatepull).CurrentValues.SetValues(p);
+                    }
+                    else {
+                        p.IsNew = true;
+                        dbContext.Entry(p).State = System.Data.EntityState.Added;
+                    }
                 }
                 else {
                     dbContext.Entry(p).State = System.Data.EntityState.Added;
                 }
             });
         }
-        public static void UpdateGitCommit(SampleCode entity, SampleCode original, AzureReportEntities dbContext)
+        public static void AddOrUpdateGitCommit(SampleCode entity, SampleCode original, AzureReportEntities dbContext)
         {
             entity.GitHubCommits.ToList<GitHubCommit>().ForEach((p) =>
             {
-                p.GitCodeId = original.Id;
-                if (original.GitHubCommits.Any(c => c.Sha == p.Sha))
+                if (original != null)
                 {
-                    var updatepull = original.GitHubCommits.Where(c => c.Sha == p.Sha).FirstOrDefault();
-                    p.Id = updatepull.Id;
-                    dbContext.Entry(updatepull).CurrentValues.SetValues(p);
+
+                    p.GitCodeId = original.Id;
+                    if (original.GitHubCommits.Any(c => c.Sha == p.Sha))
+                    {
+                        var updatepull = original.GitHubCommits.Where(c => c.Sha == p.Sha).FirstOrDefault();
+                        p.Id = updatepull.Id;
+                        dbContext.Entry(updatepull).CurrentValues.SetValues(p);
+                    }
+                    else {
+                        p.IsNew = true;
+                        dbContext.Entry(p).State = System.Data.EntityState.Added;
+                    }
                 }
                 else {
                     dbContext.Entry(p).State = System.Data.EntityState.Added;
@@ -190,17 +180,20 @@ namespace MooncakeTool.Common
             foreach (var item in result)
             {
                 CardModel card = new CardModel();
+                card.Id = item.Id;
                 card.Title = item.Title;
+                card.NewCommitsHistory = HistoryDll.NewCommitNumber(item.Id);
+
                 card.Description = item.Description;
                 foreach (var c in item.SamplePlatforms)
                 {
                     card.Platforms = new List<string>();
-                    card.Platforms.Add(FindPlatformNamebyId(c.PlatformId));
+                    card.Platforms.Add(PlatformDll.FindPlatformNamebyId(c.PlatformId));
                 }
                 foreach (var c in item.SampleProducts)
                 {
                     card.Products = new List<string>();
-                    card.Products.Add(FindProductNamebyId(c.ProductId));
+                    card.Products.Add(ProductDll.FindProductNamebyId(c.ProductId));
                 }
                 card.Author = item.Author;
                 card.Link = item.GitResourceUrl;
@@ -209,6 +202,10 @@ namespace MooncakeTool.Common
             return cards;
         }
 
+        /// <summary>
+        /// total page
+        /// </summary>
+        /// <returns></returns>
         public static int[] GetTotalSampleNumber()
         {
             AzureReportEntities dbContext = new AzureReportEntities();

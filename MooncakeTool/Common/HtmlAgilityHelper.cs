@@ -48,7 +48,7 @@ namespace MooncakeTool.Common
                         foreach (var product in products)
                         {
                             var pro = product.InnerText;
-                            sample.SampleProducts.Add(new SampleProduct() { ProductId = SampleCodeDll.FindProductIDbyName(pro) });
+                            sample.SampleProducts.Add(new SampleProduct() { ProductId = ProductDll.FindProductIDbyName(pro) });
                         }
                     }
                     //add sample code platform
@@ -58,7 +58,7 @@ namespace MooncakeTool.Common
                         foreach (var platform in platforms)
                         {
                             var pla = platform.InnerText;
-                            sample.SamplePlatforms.Add(new SamplePlatform() { PlatformId = SampleCodeDll.FindPlatformIDbyName(pla) });
+                            sample.SamplePlatforms.Add(new SamplePlatform() { PlatformId = PlatformDll.FindPlatformIDbyName(pla) });
                         }
                     }
                     //add sample code pull request

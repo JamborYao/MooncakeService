@@ -25,6 +25,7 @@ namespace MooncakeTool
         public Nullable<System.DateTime> CloseAt { get; set; }
         public Nullable<System.DateTime> UpdateAt { get; set; }
         public string Html_Url { get; set; }
+        public Nullable<bool> IsNew { get; set; }
     
         public virtual SampleCode SampleCode { get; set; }
     }

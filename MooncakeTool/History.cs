@@ -18,5 +18,6 @@ namespace MooncakeTool
         public string HistoryType { get; set; }
         public Nullable<int> ForeignId { get; set; }
         public Nullable<bool> IsHistory { get; set; }
+        public Nullable<int> GitCodeId { get; set; }
     }
 }

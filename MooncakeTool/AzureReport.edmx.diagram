@@ -5,17 +5,17 @@
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
       <Diagram DiagramId="429a490891604119a913a791f174d41b" Name="Diagram1" ZoomLevel="73" >
-        <EntityTypeShape EntityType="AzureReportModel.BaseThread" Width="1.5" PointX="8.75" PointY="0.875" />
-        <EntityTypeShape EntityType="AzureReportModel.GitHubCommit" Width="1.5" PointX="3" PointY="7.25" />
-        <EntityTypeShape EntityType="AzureReportModel.GitHubIssue" Width="1.5" PointX="3" PointY="17.125" />
-        <EntityTypeShape EntityType="AzureReportModel.GitHubPullRequest" Width="1.5" PointX="3" PointY="13.5" />
-        <EntityTypeShape EntityType="AzureReportModel.History" Width="1.5" PointX="0.75" PointY="0.875" />
-        <EntityTypeShape EntityType="AzureReportModel.Platform" Width="1.5" PointX="3.75" PointY="3.75" />
-        <EntityTypeShape EntityType="AzureReportModel.Product" Width="1.5" PointX="3.75" PointY="0.75" />
-        <EntityTypeShape EntityType="AzureReportModel.SampleCode" Width="1.5" PointX="0.75" PointY="8.125" />
-        <EntityTypeShape EntityType="AzureReportModel.SamplePlatform" Width="1.5" PointX="6" PointY="5.75" />
-        <EntityTypeShape EntityType="AzureReportModel.SampleProduct" Width="1.5" PointX="6" PointY="8.75" />
-        <EntityTypeShape EntityType="AzureReportModel.sysdiagram" Width="1.5" PointX="0.75" PointY="3.875" />
+        <EntityTypeShape EntityType="AzureReportModel.BaseThread" Width="1.5" PointX="5.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AzureReportModel.GitHubCommit" Width="1.5" PointX="3" PointY="17.625" />
+        <EntityTypeShape EntityType="AzureReportModel.GitHubIssue" Width="1.5" PointX="3" PointY="4.375" />
+        <EntityTypeShape EntityType="AzureReportModel.GitHubPullRequest" Width="1.5" PointX="3" PointY="13.875" />
+        <EntityTypeShape EntityType="AzureReportModel.History" Width="1.5" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="AzureReportModel.Platform" Width="1.5" PointX="0.75" PointY="4.625" />
+        <EntityTypeShape EntityType="AzureReportModel.Product" Width="1.5" PointX="3.75" PointY="1.625" />
+        <EntityTypeShape EntityType="AzureReportModel.SampleCode" Width="1.5" PointX="0.75" PointY="7.875" />
+        <EntityTypeShape EntityType="AzureReportModel.SamplePlatform" Width="1.5" PointX="3" PointY="8.625" />
+        <EntityTypeShape EntityType="AzureReportModel.SampleProduct" Width="1.5" PointX="6" PointY="8.625" />
+        <EntityTypeShape EntityType="AzureReportModel.sysdiagram" Width="1.5" PointX="7.75" PointY="0.75" />
         <AssociationConnector Association="AzureReportModel.FK_GitCommit_SampleCode" />
         <AssociationConnector Association="AzureReportModel.FK_GitIssue_SampleCode" />
         <AssociationConnector Association="AzureReportModel.FK_GitPull_SampleCode" />

@@ -39,7 +39,7 @@ namespace MooncakeTool.Controllers
             }
             while (num > 0);
             SampleCodeDll.BatchInsertSampleCode(samples);
-
+            CommitDll.FindAllIsNewEntity();
         }
 
         /// <summary>
