@@ -68,7 +68,7 @@ namespace MooncakeTool.Common
                         AddOrUpdateGitCommit(entity, null, dbContext);
                     }
                     dbContext.SaveChanges();
-                   //' CommitDll.FindAllIsNewEntity();
+                    //' CommitDll.FindAllIsNewEntity();
                 }
 
                 return true;
@@ -114,7 +114,7 @@ namespace MooncakeTool.Common
                         p.IsNew = true;
                         // log new git pull to history table
                         dbContext.Entry(p).State = System.Data.EntityState.Added;
-                        
+
                     }
                 }
                 else {
@@ -172,10 +172,22 @@ namespace MooncakeTool.Common
             });
         }
 
-        public static List<CardModel> GetCardInfo(int page)
+        public static List<CardModel> GetCardInfo(int page, string searchKey)
         {
             AzureReportEntities dbContext = new AzureReportEntities();
-            var result = dbContext.SampleCodes.OrderBy(c => c.Id).Skip(page - 1).Take(numberEachPage);
+            System.Linq.Expressions.Expression<Func<SampleCode, bool>> express;
+            if (searchKey.ToLower() == "all")
+            {
+                express = s => 1 == 1;
+
+            }
+            else
+            {
+                express = s => s.Title.IndexOf(searchKey.ToLower()) >= 0;
+
+            }
+
+            var result = dbContext.SampleCodes.Where(express).OrderBy(c => c.Id).Skip(page - 1).Take(numberEachPage);
             List<CardModel> cards = new List<CardModel>();
             foreach (var item in result)
             {
@@ -206,11 +218,39 @@ namespace MooncakeTool.Common
         /// total page
         /// </summary>
         /// <returns></returns>
-        public static int[] GetTotalSampleNumber()
+        public static int[] GetTotalSampleNumber(string searchKey)
         {
             AzureReportEntities dbContext = new AzureReportEntities();
+            System.Linq.Expressions.Expression<Func<SampleCode, bool>> express;
+            if (searchKey.ToLower() == "all")
+            {
+                express = s => 1 == 1;
 
-            var numbers = dbContext.SampleCodes.Count();
+            }
+            else
+            {
+                express = s => s.Title.IndexOf(searchKey.ToLower()) >= 0;
+
+            }
+            var numbers = dbContext.SampleCodes.Where(express).Count();
+            var total = Convert.ToInt16(Math.Ceiling(((decimal)numbers / (decimal)numberEachPage)));
+
+            int[] array = new int[total];
+            for (int i = 0; i < total; i++)
+            {
+                array[i] = i;
+            }
+            return array;
+        }
+
+        /// <summary>
+        /// get total search page number
+        /// </summary>
+        /// <param name="numbers"></param>
+        /// <returns></returns>
+        public static int[] GetSearchSampleNumber(int numbers)
+        {
+
             var total = Convert.ToInt16(Math.Ceiling(((decimal)numbers / (decimal)numberEachPage)));
 
             int[] array = new int[total];
@@ -221,5 +261,44 @@ namespace MooncakeTool.Common
             return array;
         }
         private static int numberEachPage = 18;
+
+        public static List<CardModel> SearchByTitle(string title)
+        {
+            AzureReportEntities dbContext = new AzureReportEntities();
+            List<SampleCode> sample = new List<SampleCode>();
+            List<CardModel> cards = new List<CardModel>();
+            var result = dbContext.SampleCodes.Where(c => c.Title.IndexOf(title) >= 0);
+            if (result != null)
+            {
+                foreach (var item in result)
+                {
+                    CardModel card = new CardModel();
+                    card.Id = item.Id;
+                    card.Title = item.Title;
+                    card.NewCommitsHistory = HistoryDll.NewCommitNumber(item.Id);
+
+                    card.Description = item.Description;
+                    foreach (var c in item.SamplePlatforms)
+                    {
+                        card.Platforms = new List<string>();
+                        card.Platforms.Add(PlatformDll.FindPlatformNamebyId(c.PlatformId));
+                    }
+                    foreach (var c in item.SampleProducts)
+                    {
+                        card.Products = new List<string>();
+                        card.Products.Add(ProductDll.FindProductNamebyId(c.ProductId));
+                    }
+                    card.Author = item.Author;
+                    card.Link = item.GitResourceUrl;
+                    cards.Add(card);
+                }
+
+                return cards;
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
 }

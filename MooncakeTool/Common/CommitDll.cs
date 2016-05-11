@@ -26,6 +26,11 @@ namespace MooncakeTool.Common
 
         }
 
+        /// <summary>
+        /// find new commit by sample code id. 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>new commits</returns>
         public static List<Models.CommitModel> FindNewCommitById(int id)
         {
             AzureReportEntities dbContext = new AzureReportEntities();

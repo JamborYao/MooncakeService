@@ -50,5 +50,20 @@ namespace MooncakeTool.Common
                 throw e;
             }
         }
+
+        public static List<Platform> FindAllPlatform()
+        {
+            AzureReportEntities dbContext = new AzureReportEntities();
+            var result = from r in dbContext.Platforms select r;
+            if (result != null)
+            {
+                return result.ToList<Platform>();
+            }
+            else
+            {
+                return null;
+            }
+
+        }
     }
 }

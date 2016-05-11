@@ -68,7 +68,7 @@ namespace MooncakeTool.Common
             {
                 GitHubCommit issue = new GitHubCommit();
                 issue.Sha = jsonissue.Value<string>("sha");
-                issue.Html_Url = jsonissue.Value<string>("comments_url");
+                issue.Html_Url = jsonissue.Value<string>("html_url");
                 foreach (var subjson in jsonissue)
                 {
                     if (((Newtonsoft.Json.Linq.JProperty)(subjson)).Name == "parents"&&subjson.FirstOrDefault().Count()>0)

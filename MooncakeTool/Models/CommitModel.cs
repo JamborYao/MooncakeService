@@ -9,7 +9,7 @@ namespace MooncakeTool.Models
     {
         public string Title { get; set; }
 
-        public string Message { get; set; }
+        public string  Message { get; set; }
         public string Html_Url { get; set; }
 
 

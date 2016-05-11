@@ -67,21 +67,31 @@ namespace MooncakeTool.Controllers
             Common.GitHubDeveloper.GetGitHubCommitsEntity("https://github.com/Azure-Samples/storage-blob-dotnet-getting-started");
         }
 
-        [Route("api/getCodeInfobyPage/{page}")]
+        [Route("api/getCodeInfobyPage/{page}/{searchKey}")]
         [HttpGet]
-        public HttpResponseMessage GetCodeSampleInfoByPage(int page)
+        public HttpResponseMessage GetCodeSampleInfoByPage(int page,string searchKey)
         {
-            var result = SampleCodeDll.GetCardInfo(page);
+            var result = SampleCodeDll.GetCardInfo(page,searchKey);
             string volumnJson = Newtonsoft.Json.JsonConvert.SerializeObject(result);
             var json = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };
             return json;
         }
 
-        [Route("api/getPageNumber")]
+        [Route("api/getPageNumber/{searchKey}")]
         [HttpGet]
-        public HttpResponseMessage GetPageNumber()
+        public HttpResponseMessage GetPageNumber(string searchKey)
         {
-            var result= SampleCodeDll.GetTotalSampleNumber();
+            var result= SampleCodeDll.GetTotalSampleNumber(searchKey);
+            string volumnJson = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+            var json = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };
+            return json;
+        }
+
+        [Route("api/getSearchPageNumber/{number}")]
+        [HttpGet]
+        public HttpResponseMessage GetSearchPageNumber(int number)
+        {
+            var result = SampleCodeDll.GetSearchSampleNumber(number);
             string volumnJson = Newtonsoft.Json.JsonConvert.SerializeObject(result);
             var json = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };
             return json;
@@ -95,5 +105,36 @@ namespace MooncakeTool.Controllers
             var json = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };
             return json;
         }
+
+        [Route("api/getAllProduct")]
+        [HttpGet]
+        public HttpResponseMessage GetAllProduct()
+        {
+            List<Product> result = ProductDll.FindAllProduct();
+            string volumnJson = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+            var json = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };
+            return json;
+        }
+
+        [Route("api/getAllPlatform")]
+        [HttpGet]
+        public HttpResponseMessage GetAllPlatform()
+        {
+            List<Platform> result = PlatformDll.FindAllPlatform();
+            string volumnJson = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+            var json = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };
+            return json;
+        }
+
+        [Route("api/searchByTitle/{title}")]
+        [HttpGet]
+        public HttpResponseMessage SearchByTitle(string title)
+        {
+            List<CardModel> result = SampleCodeDll.SearchByTitle(title);
+            string volumnJson = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+            var json = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };
+            return json;
+        }
+
     }
 }

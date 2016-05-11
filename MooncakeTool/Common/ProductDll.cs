@@ -48,5 +48,19 @@ namespace MooncakeTool.Common
                 throw e;
             }
         }
+        public static List<Product> FindAllProduct()
+        {
+            AzureReportEntities dbContext = new AzureReportEntities();
+            var result = from r in dbContext.Products select r;
+            if (result != null)
+            {
+                return result.ToList<Product>();
+            }
+            else
+            {
+                return null;
+            }
+
+        }
     }
 }
