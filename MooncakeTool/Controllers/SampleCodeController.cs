@@ -86,6 +86,14 @@ namespace MooncakeTool.Controllers
             var json = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };
             return json;
         }
-
+        [Route("api/getNewCommit/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetNewCommit(int id)
+        {
+            var result = CommitDll.FindNewCommitById(id);
+            string volumnJson = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+            var json = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };
+            return json;
+        }
     }
 }

@@ -224,6 +224,7 @@
       <DependentUpon>AzureReport.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\CardModel.cs" />
+    <Compile Include="Models\CommitModel.cs" />
     <Compile Include="Models\ForumThreads.cs" />
     <Compile Include="MSDNPageView_Result.cs">
       <DependentUpon>AzureReport.tt</DependentUpon>
