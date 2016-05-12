@@ -1,0 +1,17 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web;
+
+namespace MooncakeTool.Models
+{
+    public class OperationModel
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        public string CurrentProgress { get; set; }
+        public string Log { get; set; }
+        public int? StateValue { get; set; }
+        public DateTime? LogAt { get; set; }
+    }
+}

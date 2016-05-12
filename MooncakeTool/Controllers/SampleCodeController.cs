@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Text;
 using System.Web.Http;
 using System.Web.Http.Cors;
+using System.Web.Http.Results;
 
 namespace MooncakeTool.Controllers
 {
@@ -139,7 +140,7 @@ namespace MooncakeTool.Controllers
         [HttpGet]
         public HttpResponseMessage GetSampleCodeOperation(int id)
         {
-            CodeOperation result = CodeOperationDll.GetCodeOperation(id);
+            OperationModel result = CodeOperationDll.GetCodeOperation(id);
             string volumnJson = Newtonsoft.Json.JsonConvert.SerializeObject(result);
             var json = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };
             return json;
@@ -152,6 +153,13 @@ namespace MooncakeTool.Controllers
             string volumnJson = Newtonsoft.Json.JsonConvert.SerializeObject(result);
             var json = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };
             return json;
+        }
+
+        [Route("api/updateCodeState")]
+        [HttpPost]
+        public void UpdateCodeState(OperationModel data)
+        {
+            CodeOperationDll.UpdateOperation(data);
         }
     }
 }

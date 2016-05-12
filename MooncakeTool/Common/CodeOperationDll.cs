@@ -19,15 +19,60 @@ namespace MooncakeTool.Common
         /// </summary>
         /// <param name="sampleCodeID"></param>
         /// <returns></returns>
-        public static CodeOperation GetCodeOperation(int sampleCodeID)
+        public static Models.OperationModel GetCodeOperation(int sampleCodeID)
         {
             AzureReportEntities dbContext = new AzureReportEntities();
             var result = from c in dbContext.CodeOperations where c.SampleCodeId == sampleCodeID select c;
+
+
+            Models.OperationModel model = new Models.OperationModel();
+            model.Title = dbContext.SampleCodes.Where(c => c.Id == sampleCodeID).FirstOrDefault().Title;
             if (result != null)
             {
-                return result.ToList<CodeOperation>().FirstOrDefault();
+                CodeOperation operation = result.ToList<CodeOperation>().FirstOrDefault();
+                if (operation != null)
+                {
+                   
+                    model.Log = operation.LogInfo;
+                    model.LogAt = operation.LogAt;
+                    model.StateValue = operation.State;
+                    model.Id = operation.Id;
+                    var state = dbContext.CodeStates.Where(c => c.Id == operation.State);
+                    if (state != null && state.Count() >= 1)
+                    {
+                        model.CurrentProgress = state.FirstOrDefault().State;
+                    }
+                }
+                return model;
+
+
             }
             else return null;
+        }
+
+        public static void UpdateOperation(Models.OperationModel model)
+        {
+            AzureReportEntities dbContext = new AzureReportEntities();
+            CodeOperation operation = new CodeOperation();
+           var entity= dbContext.CodeOperations.Where(c => c.Id == model.Id);
+            if (entity != null)
+            {
+                if (entity.Count() >= 1)
+                {
+                    operation = entity.FirstOrDefault();
+                    operation.State = model.StateValue;
+                    operation.LogAt = DateTime.Now;
+                    operation.LogInfo = model.Log;
+                    dbContext.SaveChanges();
+                }
+                else {
+                    operation.State = model.StateValue;
+                    operation.LogAt = DateTime.Now;
+                    operation.LogInfo = model.Log;
+                    dbContext.CodeOperations.Add(operation);
+                    dbContext.SaveChanges();
+                }
+            }
         }
     }
 }
