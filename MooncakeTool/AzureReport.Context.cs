@@ -29,6 +29,8 @@ namespace MooncakeTool
         }
     
         public DbSet<BaseThread> BaseThreads { get; set; }
+        public DbSet<CodeOperation> CodeOperations { get; set; }
+        public DbSet<CodeState> CodeStates { get; set; }
         public DbSet<GitHubCommit> GitHubCommits { get; set; }
         public DbSet<GitHubIssue> GitHubIssues { get; set; }
         public DbSet<GitHubPullRequest> GitHubPullRequests { get; set; }

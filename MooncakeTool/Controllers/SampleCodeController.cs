@@ -135,6 +135,23 @@ namespace MooncakeTool.Controllers
             var json = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };
             return json;
         }
-
+        [Route("api/getSampleCodeOperation/{id}")]
+        [HttpGet]
+        public HttpResponseMessage GetSampleCodeOperation(int id)
+        {
+            CodeOperation result = CodeOperationDll.GetCodeOperation(id);
+            string volumnJson = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+            var json = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };
+            return json;
+        }
+        [Route("api/getAllState")]
+        [HttpGet]
+        public HttpResponseMessage GetAllState()
+        {
+            var result = CodeOperationDll.GetAllCodeState();
+            string volumnJson = Newtonsoft.Json.JsonConvert.SerializeObject(result);
+            var json = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };
+            return json;
+        }
     }
 }

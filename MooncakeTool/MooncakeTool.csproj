@@ -192,7 +192,14 @@
     <Compile Include="BaseThread.cs">
       <DependentUpon>AzureReport.tt</DependentUpon>
     </Compile>
+    <Compile Include="CodeOperation.cs">
+      <DependentUpon>AzureReport.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CodeState.cs">
+      <DependentUpon>AzureReport.tt</DependentUpon>
+    </Compile>
     <Compile Include="Common\BaseThreadDll.cs" />
+    <Compile Include="Common\CodeOperationDll.cs" />
     <Compile Include="Common\CommitDll.cs" />
     <Compile Include="Common\ExcelHelper.cs" />
     <Compile Include="Common\GitHubDeveloper.cs" />

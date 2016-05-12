@@ -16,6 +16,7 @@ namespace MooncakeTool
     {
         public SampleCode()
         {
+            this.CodeOperations = new HashSet<CodeOperation>();
             this.GitHubCommits = new HashSet<GitHubCommit>();
             this.GitHubIssues = new HashSet<GitHubIssue>();
             this.GitHubPullRequests = new HashSet<GitHubPullRequest>();
@@ -32,6 +33,7 @@ namespace MooncakeTool
         public Nullable<System.DateTime> CreateAt { get; set; }
         public Nullable<System.DateTime> CustomAt { get; set; }
     
+        public virtual ICollection<CodeOperation> CodeOperations { get; set; }
         public virtual ICollection<GitHubCommit> GitHubCommits { get; set; }
         public virtual ICollection<GitHubIssue> GitHubIssues { get; set; }
         public virtual ICollection<GitHubPullRequest> GitHubPullRequests { get; set; }

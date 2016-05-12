@@ -184,7 +184,6 @@ namespace MooncakeTool.Common
             else
             {
                 express = s => s.Title.IndexOf(searchKey.ToLower()) >= 0;
-
             }
 
             var result = dbContext.SampleCodes.Where(express).OrderBy(c => c.Id).Skip(page - 1).Take(numberEachPage);
@@ -209,6 +208,17 @@ namespace MooncakeTool.Common
                 }
                 card.Author = item.Author;
                 card.Link = item.GitResourceUrl;
+                card.States = new List<CodeState>();
+                var operation = dbContext.CodeOperations.Where(c => c.SampleCodeId == item.Id);
+                int? id, num=null ;
+                if (operation.Count()>=1)
+                {
+                    id = operation.FirstOrDefault().State;
+                    num= dbContext.CodeStates.Where(c => c.Id == id).FirstOrDefault().Num;
+                }
+                if (num > 0&&num!=null) {
+                   card.States= dbContext.CodeStates.Where(c => c.Num <= num).ToList<CodeState>();
+                }
                 cards.Add(card);
             }
             return cards;

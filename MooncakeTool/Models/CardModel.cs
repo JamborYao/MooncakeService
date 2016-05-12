@@ -17,5 +17,7 @@ namespace MooncakeTool.Models
         public string Link { get; set; }
         public List<string> Products { get; set; }
         public string Author { get; set; }
+
+        public List<CodeState> States { get; set; }
     }
 }

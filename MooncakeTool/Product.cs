@@ -9,10 +9,9 @@
 
 namespace MooncakeTool
 {
-    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
-
+    
     public partial class Product
     {
         public Product()
@@ -24,8 +23,7 @@ namespace MooncakeTool
         public string Name { get; set; }
         public string Value { get; set; }
         public string CName { get; set; }
-
-        [JsonIgnore]
+        [Newtonsoft.Json.JsonIgnore]
         public virtual ICollection<SampleProduct> SampleProducts { get; set; }
     }
 }

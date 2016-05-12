@@ -12,18 +12,12 @@ namespace MooncakeTool
     using System;
     using System.Collections.Generic;
     
-    public partial class Platform
+    public partial class CodeState
     {
-        public Platform()
-        {
-            this.SamplePlatforms = new HashSet<SamplePlatform>();
-        }
-    
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Value { get; set; }
-        public string CName { get; set; }
-        [Newtonsoft.Json.JsonIgnore]
-        public virtual ICollection<SamplePlatform> SamplePlatforms { get; set; }
+        public string State { get; set; }
+        public string Style { get; set; }
+        public string Width { get; set; }
+        public Nullable<int> Num { get; set; }
     }
 }

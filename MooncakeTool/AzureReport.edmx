@@ -34,6 +34,26 @@
           <Property Name="CustomerNeeded" Type="nvarchar(max)" />
           <Property Name="Difficult" Type="nvarchar(max)" />
         </EntityType>
+        <EntityType Name="CodeOperation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="SampleCodeId" Type="int" />
+          <Property Name="LogInfo" Type="nvarchar(max)" />
+          <Property Name="LogAt" Type="date" />
+          <Property Name="State" Type="int" />
+        </EntityType>
+        <EntityType Name="CodeState">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="State" Type="nchar" MaxLength="10" />
+          <Property Name="Style" Type="nchar" MaxLength="10" />
+          <Property Name="Width" Type="nchar" MaxLength="20" />
+          <Property Name="Num" Type="int" />
+        </EntityType>
         <EntityType Name="GitHubCommit">
           <Key>
             <PropertyRef Name="Id" />
@@ -147,6 +167,18 @@
           <Property Name="version" Type="int" />
           <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
+        <Association Name="FK_CodeOperation_SampleCode">
+          <End Role="SampleCode" Type="Self.SampleCode" Multiplicity="0..1" />
+          <End Role="CodeOperation" Type="Self.CodeOperation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SampleCode">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CodeOperation">
+              <PropertyRef Name="SampleCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_GitCommit_SampleCode">
           <End Role="SampleCode" Type="Self.SampleCode" Multiplicity="0..1" />
           <End Role="GitHubCommit" Type="Self.GitHubCommit" Multiplicity="*" />
@@ -273,6 +305,8 @@
         <Function Name="test" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
         <EntityContainer Name="AzureReportModelStoreContainer">
           <EntitySet Name="BaseThread" EntityType="Self.BaseThread" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CodeOperation" EntityType="Self.CodeOperation" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CodeState" EntityType="Self.CodeState" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GitHubCommit" EntityType="Self.GitHubCommit" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GitHubIssue" EntityType="Self.GitHubIssue" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GitHubPullRequest" EntityType="Self.GitHubPullRequest" Schema="dbo" store:Type="Tables" />
@@ -283,6 +317,10 @@
           <EntitySet Name="SamplePlatform" EntityType="Self.SamplePlatform" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="SampleProduct" EntityType="Self.SampleProduct" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="sysdiagrams" EntityType="Self.sysdiagrams" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CodeOperation_SampleCode" Association="Self.FK_CodeOperation_SampleCode">
+            <End Role="SampleCode" EntitySet="SampleCode" />
+            <End Role="CodeOperation" EntitySet="CodeOperation" />
+          </AssociationSet>
           <AssociationSet Name="FK_GitCommit_SampleCode" Association="Self.FK_GitCommit_SampleCode">
             <End Role="SampleCode" EntitySet="SampleCode" />
             <End Role="GitHubCommit" EntitySet="GitHubCommit" />
@@ -357,6 +395,8 @@
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
           <EntitySet Name="BaseThreads" EntityType="AzureReportModel.BaseThread" />
+          <EntitySet Name="CodeOperations" EntityType="AzureReportModel.CodeOperation" />
+          <EntitySet Name="CodeStates" EntityType="AzureReportModel.CodeState" />
           <EntitySet Name="GitHubCommits" EntityType="AzureReportModel.GitHubCommit" />
           <EntitySet Name="GitHubIssues" EntityType="AzureReportModel.GitHubIssue" />
           <EntitySet Name="GitHubPullRequests" EntityType="AzureReportModel.GitHubPullRequest" />
@@ -367,6 +407,10 @@
           <EntitySet Name="SamplePlatforms" EntityType="AzureReportModel.SamplePlatform" />
           <EntitySet Name="SampleProducts" EntityType="AzureReportModel.SampleProduct" />
           <EntitySet Name="sysdiagrams" EntityType="AzureReportModel.sysdiagram" />
+          <AssociationSet Name="FK_CodeOperation_SampleCode" Association="AzureReportModel.FK_CodeOperation_SampleCode">
+            <End Role="SampleCode" EntitySet="SampleCodes" />
+            <End Role="CodeOperation" EntitySet="CodeOperations" />
+          </AssociationSet>
           <AssociationSet Name="FK_GitCommit_SampleCode" Association="AzureReportModel.FK_GitCommit_SampleCode">
             <End Role="SampleCode" EntitySet="SampleCodes" />
             <End Role="GitHubCommit" EntitySet="GitHubCommits" />
@@ -450,6 +494,27 @@
           <Property Name="CustomerNeeded" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Difficult" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
+        <EntityType Name="CodeOperation">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="SampleCodeId" Type="Int32" />
+          <Property Name="LogInfo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="LogAt" Type="DateTime" Precision="0" />
+          <Property Name="State" Type="Int32" />
+          <NavigationProperty Name="SampleCode" Relationship="AzureReportModel.FK_CodeOperation_SampleCode" FromRole="CodeOperation" ToRole="SampleCode" />
+        </EntityType>
+        <EntityType Name="CodeState">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="State" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Style" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Width" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="Num" Type="Int32" />
+        </EntityType>
         <EntityType Name="GitHubCommit">
           <Key>
             <PropertyRef Name="Id" />
@@ -462,8 +527,8 @@
           <Property Name="PSha" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="GitCodeId" Type="Int32" />
           <Property Name="Html_Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="SampleCode" Relationship="AzureReportModel.FK_GitCommit_SampleCode" FromRole="GitHubCommit" ToRole="SampleCode" />
           <Property Name="IsNew" Type="Boolean" />
+          <NavigationProperty Name="SampleCode" Relationship="AzureReportModel.FK_GitCommit_SampleCode" FromRole="GitHubCommit" ToRole="SampleCode" />
         </EntityType>
         <EntityType Name="GitHubIssue">
           <Key>
@@ -480,8 +545,8 @@
           <Property Name="CloseAt" Type="DateTime" Precision="0" />
           <Property Name="UpdateAt" Type="DateTime" Precision="0" />
           <Property Name="Html_Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="SampleCode" Relationship="AzureReportModel.FK_GitIssue_SampleCode" FromRole="GitHubIssue" ToRole="SampleCode" />
           <Property Name="IsNew" Type="Boolean" />
+          <NavigationProperty Name="SampleCode" Relationship="AzureReportModel.FK_GitIssue_SampleCode" FromRole="GitHubIssue" ToRole="SampleCode" />
         </EntityType>
         <EntityType Name="GitHubPullRequest">
           <Key>
@@ -496,8 +561,8 @@
           <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="UpdateAt" Type="DateTime" Precision="0" />
           <Property Name="GitCodeId" Type="Int32" />
-          <NavigationProperty Name="SampleCode" Relationship="AzureReportModel.FK_GitPull_SampleCode" FromRole="GitHubPullRequest" ToRole="SampleCode" />
           <Property Name="IsNew" Type="Boolean" />
+          <NavigationProperty Name="SampleCode" Relationship="AzureReportModel.FK_GitPull_SampleCode" FromRole="GitHubPullRequest" ToRole="SampleCode" />
         </EntityType>
         <EntityType Name="History">
           <Key>
@@ -541,6 +606,7 @@
           <Property Name="GitResourceUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="CreateAt" Type="DateTime" Precision="0" />
           <Property Name="CustomAt" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="CodeOperations" Relationship="AzureReportModel.FK_CodeOperation_SampleCode" FromRole="SampleCode" ToRole="CodeOperation" />
           <NavigationProperty Name="GitHubCommits" Relationship="AzureReportModel.FK_GitCommit_SampleCode" FromRole="SampleCode" ToRole="GitHubCommit" />
           <NavigationProperty Name="GitHubIssues" Relationship="AzureReportModel.FK_GitIssue_SampleCode" FromRole="SampleCode" ToRole="GitHubIssue" />
           <NavigationProperty Name="GitHubPullRequests" Relationship="AzureReportModel.FK_GitPull_SampleCode" FromRole="SampleCode" ToRole="GitHubPullRequest" />
@@ -577,6 +643,18 @@
           <Property Name="version" Type="Int32" />
           <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
+        <Association Name="FK_CodeOperation_SampleCode">
+          <End Type="AzureReportModel.SampleCode" Role="SampleCode" Multiplicity="0..1" />
+          <End Type="AzureReportModel.CodeOperation" Role="CodeOperation" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SampleCode">
+              <PropertyRef Name="Id" />
+            </Principal>
+            <Dependent Role="CodeOperation">
+              <PropertyRef Name="SampleCodeId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_GitCommit_SampleCode">
           <End Type="AzureReportModel.SampleCode" Role="SampleCode" Multiplicity="0..1" />
           <End Type="AzureReportModel.GitHubCommit" Role="GitHubCommit" Multiplicity="*" />
@@ -740,6 +818,28 @@
                 <ScalarProperty Name="TechCategory" ColumnName="TechCategory" />
                 <ScalarProperty Name="WeightImpact" ColumnName="WeightImpact" />
                 <ScalarProperty Name="Rank" ColumnName="Rank" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CodeOperations">
+            <EntityTypeMapping TypeName="AzureReportModel.CodeOperation">
+              <MappingFragment StoreEntitySet="CodeOperation">
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="LogAt" ColumnName="LogAt" />
+                <ScalarProperty Name="LogInfo" ColumnName="LogInfo" />
+                <ScalarProperty Name="SampleCodeId" ColumnName="SampleCodeId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CodeStates">
+            <EntityTypeMapping TypeName="AzureReportModel.CodeState">
+              <MappingFragment StoreEntitySet="CodeState">
+                <ScalarProperty Name="Num" ColumnName="Num" />
+                <ScalarProperty Name="Width" ColumnName="Width" />
+                <ScalarProperty Name="Style" ColumnName="Style" />
+                <ScalarProperty Name="State" ColumnName="State" />
                 <ScalarProperty Name="Id" ColumnName="Id" />
               </MappingFragment>
             </EntityTypeMapping>
