@@ -7,10 +7,10 @@ namespace MooncakeTool.Models
 {
     public class CardModel
     {
-        public int Id { get; set; }
+        public int? Id { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public int NewCommitsHistory { get; set; }
+        public int? NewCommitsHistory { get; set; }
 
         public List<string> Platforms { get; set; }
 

@@ -215,6 +215,12 @@
     <Compile Include="Controllers\SampleCodeController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\VolumnController.cs" />
+    <Compile Include="GetSearchSamples1_Result.cs">
+      <DependentUpon>AzureReport.tt</DependentUpon>
+    </Compile>
+    <Compile Include="GetSearchSamples_Result.cs">
+      <DependentUpon>AzureReport.tt</DependentUpon>
+    </Compile>
     <Compile Include="GitHubCommit.cs">
       <DependentUpon>AzureReport.tt</DependentUpon>
     </Compile>

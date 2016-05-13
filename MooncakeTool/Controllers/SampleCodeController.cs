@@ -68,21 +68,21 @@ namespace MooncakeTool.Controllers
             Common.GitHubDeveloper.GetGitHubCommitsEntity("https://github.com/Azure-Samples/storage-blob-dotnet-getting-started");
         }
 
-        [Route("api/getCodeInfobyPage/{page}/{searchKey}")]
+        [Route("api/getCodeInfobyPage/{page}/{searchKey}/{product}/{platform}/{state}")]
         [HttpGet]
-        public HttpResponseMessage GetCodeSampleInfoByPage(int page,string searchKey)
+        public HttpResponseMessage GetCodeSampleInfoByPage(int page,string searchKey,int? product,int? platform, int? state)
         {
-            var result = SampleCodeDll.GetCardInfo(page,searchKey);
+            var result = SampleCodeDll.GetCardInfo(page,searchKey,product,platform,state);
             string volumnJson = Newtonsoft.Json.JsonConvert.SerializeObject(result);
             var json = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };
             return json;
         }
 
-        [Route("api/getPageNumber/{searchKey}")]
+        [Route("api/getPageNumber/{searchKey}/{product}/{platform}/{state}")]
         [HttpGet]
-        public HttpResponseMessage GetPageNumber(string searchKey)
+        public HttpResponseMessage GetPageNumber(string searchKey, int? product, int? platform, int? state)
         {
-            var result= SampleCodeDll.GetTotalSampleNumber(searchKey);
+            var result= SampleCodeDll.GetTotalSampleNumber(searchKey, product, platform, state);
             string volumnJson = Newtonsoft.Json.JsonConvert.SerializeObject(result);
             var json = new HttpResponseMessage { Content = new StringContent(volumnJson, Encoding.GetEncoding("gb2312"), "application/json") };
             return json;

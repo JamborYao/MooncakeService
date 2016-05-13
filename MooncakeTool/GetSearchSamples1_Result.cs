@@ -10,20 +10,16 @@
 namespace MooncakeTool
 {
     using System;
-    using System.Collections.Generic;
     
-    public partial class Platform
+    public partial class GetSearchSamples1_Result
     {
-        public Platform()
-        {
-            this.SamplePlatforms = new HashSet<SamplePlatform>();
-        }
-    
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string Value { get; set; }
-        public string CName { get; set; }
-    [Newtonsoft.Json.JsonIgnore]
-        public virtual ICollection<SamplePlatform> SamplePlatforms { get; set; }
+        public Nullable<int> Id { get; set; }
+        public string Title { get; set; }
+        public string Description { get; set; }
+        public string Author { get; set; }
+        public Nullable<System.DateTime> LastUpdate { get; set; }
+        public string GitResourceUrl { get; set; }
+        public Nullable<System.DateTime> CreateAt { get; set; }
+        public Nullable<System.DateTime> CustomAt { get; set; }
     }
 }

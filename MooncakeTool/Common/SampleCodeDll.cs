@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.Entity.Validation;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Web;
 
 namespace MooncakeTool.Common
@@ -172,77 +173,68 @@ namespace MooncakeTool.Common
             });
         }
 
-        public static List<CardModel> GetCardInfo(int page, string searchKey)
+        public static List<CardModel> GetCardInfo(int page, string searchKey, int? product, int? platform, int? state)
         {
             AzureReportEntities dbContext = new AzureReportEntities();
-            System.Linq.Expressions.Expression<Func<SampleCode, bool>> express;
-            if (searchKey.ToLower() == "all")
-            {
-                express = s => 1 == 1;
+          
+           
+            var result = dbContext.GetSearchSamples(searchKey, state.ToString(), product.ToString(), platform.ToString()).OrderBy(c => c.Id).Skip(page - 1).Take(numberEachPage);
 
-            }
-            else
-            {
-                express = s => s.Title.IndexOf(searchKey.ToLower()) >= 0;
-            }
-
-            var result = dbContext.SampleCodes.Where(express).OrderBy(c => c.Id).Skip(page - 1).Take(numberEachPage);
             List<CardModel> cards = new List<CardModel>();
             foreach (var item in result)
             {
+
                 CardModel card = new CardModel();
                 card.Id = item.Id;
                 card.Title = item.Title;
                 card.NewCommitsHistory = HistoryDll.NewCommitNumber(item.Id);
 
                 card.Description = item.Description;
-                foreach (var c in item.SamplePlatforms)
+                dbContext.SamplePlatforms.Where(c => c.SampleCodeId == item.Id).ToList<SamplePlatform>().ForEach(p =>
                 {
                     card.Platforms = new List<string>();
-                    card.Platforms.Add(PlatformDll.FindPlatformNamebyId(c.PlatformId));
-                }
-                foreach (var c in item.SampleProducts)
+                    card.Platforms.Add(PlatformDll.FindPlatformNamebyId(p.PlatformId));
+                });
+                dbContext.SampleProducts.Where(c => c.SampleCodeId == item.Id).ToList<SampleProduct>().ForEach(p =>
                 {
                     card.Products = new List<string>();
-                    card.Products.Add(ProductDll.FindProductNamebyId(c.ProductId));
-                }
+                    card.Products.Add(ProductDll.FindProductNamebyId(p.ProductId));
+                });
+
                 card.Author = item.Author;
                 card.Link = item.GitResourceUrl;
                 card.States = new List<CodeState>();
                 var operation = dbContext.CodeOperations.Where(c => c.SampleCodeId == item.Id);
-                int? id, num=null ;
-                if (operation.Count()>=1)
+                int? id, num = null;
+                if (operation.Count() >= 1)
                 {
                     id = operation.FirstOrDefault().State;
-                    num= dbContext.CodeStates.Where(c => c.Id == id).FirstOrDefault().Num;
+                    num = dbContext.CodeStates.Where(c => c.Id == id).FirstOrDefault().Num;
                 }
-                if (num > 0&&num!=null) {
-                   card.States= dbContext.CodeStates.Where(c => c.Num <= num).ToList<CodeState>();
+                if (num > 0 && num != null)
+                {
+                    card.States = dbContext.CodeStates.Where(c => c.Num <= num).ToList<CodeState>();
                 }
                 cards.Add(card);
             }
             return cards;
         }
+       
+
 
         /// <summary>
         /// total page
         /// </summary>
         /// <returns></returns>
-        public static int[] GetTotalSampleNumber(string searchKey)
+        public static int[] GetTotalSampleNumber(string searchKey, int? product, int? platform, int? state)
         {
             AzureReportEntities dbContext = new AzureReportEntities();
-            System.Linq.Expressions.Expression<Func<SampleCode, bool>> express;
-            if (searchKey.ToLower() == "all")
-            {
-                express = s => 1 == 1;
+         
 
-            }
-            else
-            {
-                express = s => s.Title.IndexOf(searchKey.ToLower()) >= 0;
+            //  CombineExpress(out express, out productExpress, out platformExpress, out stateExpress, searchKey, product, platform, state, dbContext);
 
-            }
-            var numbers = dbContext.SampleCodes.Where(express).Count();
+            var numbers = dbContext.GetSearchSamples(searchKey, state.ToString(), product.ToString(), platform.ToString()).ToList<GetSearchSamples_Result>().Count();
+
             var total = Convert.ToInt16(Math.Ceiling(((decimal)numbers / (decimal)numberEachPage)));
 
             int[] array = new int[total];
@@ -311,4 +303,5 @@ namespace MooncakeTool.Common
             }
         }
     }
+
 }

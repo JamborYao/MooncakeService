@@ -27,7 +27,7 @@ namespace MooncakeTool.Common
             //dbContext.
         }
 
-        public static int NewCommitNumber(int id)
+        public static int NewCommitNumber(int? id)
         {
             AzureReportEntities dbContext = new AzureReportEntities();
             var result = dbContext.Histories.Where(c => c.GitCodeId == id);

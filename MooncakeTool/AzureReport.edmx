@@ -264,6 +264,12 @@
           </ReferentialConstraint>
         </Association>
         <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
+        <Function Name="GetSearchSamples" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+          <Parameter Name="title" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="state" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="product" Type="nvarchar(max)" Mode="In" />
+          <Parameter Name="platform" Type="nvarchar(max)" Mode="In" />
+        </Function>
         <Function Name="MSDNPageView" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="startdate" Type="datetime" Mode="In" />
           <Parameter Name="enddate" Type="datetime" Mode="In" />
@@ -394,6 +400,12 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
+          <FunctionImport Name="GetSearchSamples" ReturnType="Collection(AzureReportModel.GetSearchSamples_Result)">
+            <Parameter Name="title" Mode="In" Type="String" />
+            <Parameter Name="state" Mode="In" Type="String" />
+            <Parameter Name="product" Mode="In" Type="String" />
+            <Parameter Name="platform" Mode="In" Type="String" />
+          </FunctionImport>
           <EntitySet Name="BaseThreads" EntityType="AzureReportModel.BaseThread" />
           <EntitySet Name="CodeOperations" EntityType="AzureReportModel.CodeOperation" />
           <EntitySet Name="CodeStates" EntityType="AzureReportModel.CodeState" />
@@ -464,6 +476,16 @@
           <Property Type="Int32" Name="ID" Nullable="false" />
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
+        </ComplexType>
+        <ComplexType Name="GetSearchSamples1_Result">
+          <Property Type="Int32" Name="Id" Nullable="true" />
+          <Property Type="String" Name="Title" Nullable="true" />
+          <Property Type="String" Name="Description" Nullable="true" />
+          <Property Type="String" Name="Author" Nullable="true" />
+          <Property Type="DateTime" Name="LastUpdate" Nullable="true" />
+          <Property Type="String" Name="GitResourceUrl" Nullable="true" />
+          <Property Type="DateTime" Name="CreateAt" Nullable="true" />
+          <Property Type="DateTime" Name="CustomAt" Nullable="true" />
         </ComplexType>
         <EntityType Name="BaseThread">
           <Key>
@@ -739,6 +761,16 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <ComplexType Name="GetSearchSamples_Result">
+          <Property Type="Int32" Name="Id" Nullable="true" />
+          <Property Type="String" Name="Title" Nullable="true" />
+          <Property Type="String" Name="Description" Nullable="true" />
+          <Property Type="String" Name="Author" Nullable="true" />
+          <Property Type="DateTime" Name="LastUpdate" Nullable="true" />
+          <Property Type="String" Name="GitResourceUrl" Nullable="true" />
+          <Property Type="DateTime" Name="CreateAt" Nullable="true" />
+          <Property Type="DateTime" Name="CustomAt" Nullable="true" />
+        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -792,6 +824,20 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="AzureReportModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="AzureReportModel.Store.sp_upgraddiagrams" />
+          <FunctionImportMapping FunctionImportName="GetSearchSamples" FunctionName="AzureReportModel.Store.GetSearchSamples" >
+            <ResultMapping>
+              <ComplexTypeMapping TypeName="AzureReportModel.GetSearchSamples_Result">
+                <ScalarProperty Name="Id" ColumnName="Id" />
+                <ScalarProperty Name="Title" ColumnName="Title" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="Author" ColumnName="Author" />
+                <ScalarProperty Name="LastUpdate" ColumnName="LastUpdate" />
+                <ScalarProperty Name="GitResourceUrl" ColumnName="GitResourceUrl" />
+                <ScalarProperty Name="CreateAt" ColumnName="CreateAt" />
+                <ScalarProperty Name="CustomAt" ColumnName="CustomAt" />
+              </ComplexTypeMapping>
+            </ResultMapping>
+          </FunctionImportMapping>
           <EntitySetMapping Name="BaseThreads">
             <EntityTypeMapping TypeName="AzureReportModel.BaseThread">
               <MappingFragment StoreEntitySet="BaseThread">

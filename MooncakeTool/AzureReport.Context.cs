@@ -175,5 +175,26 @@ namespace MooncakeTool
         {
             return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction("sp_upgraddiagrams");
         }
+    
+        public virtual ObjectResult<GetSearchSamples_Result> GetSearchSamples(string title, string state, string product, string platform)
+        {
+            var titleParameter = title != null ?
+                new ObjectParameter("title", title) :
+                new ObjectParameter("title", typeof(string));
+    
+            var stateParameter = state != null ?
+                new ObjectParameter("state", state) :
+                new ObjectParameter("state", typeof(string));
+    
+            var productParameter = product != null ?
+                new ObjectParameter("product", product) :
+                new ObjectParameter("product", typeof(string));
+    
+            var platformParameter = platform != null ?
+                new ObjectParameter("platform", platform) :
+                new ObjectParameter("platform", typeof(string));
+    
+            return ((IObjectContextAdapter)this).ObjectContext.ExecuteFunction<GetSearchSamples_Result>("GetSearchSamples", titleParameter, stateParameter, productParameter, platformParameter);
+        }
     }
 }
