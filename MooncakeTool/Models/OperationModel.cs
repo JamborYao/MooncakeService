@@ -8,6 +8,7 @@ namespace MooncakeTool.Models
     public class OperationModel
     {
         public int Id { get; set; }
+        public int SampleCodeId { get; set; }
         public string Title { get; set; }
         public string CurrentProgress { get; set; }
         public string Log { get; set; }

@@ -26,7 +26,10 @@ namespace MooncakeTool.Common
 
 
             Models.OperationModel model = new Models.OperationModel();
-            model.Title = dbContext.SampleCodes.Where(c => c.Id == sampleCodeID).FirstOrDefault().Title;
+       
+               var getEntity = dbContext.SampleCodes.Where(c => c.Id == sampleCodeID).FirstOrDefault();
+            model.Title = getEntity.Title;
+            model.SampleCodeId = getEntity.Id;
             if (result != null)
             {
                 CodeOperation operation = result.ToList<CodeOperation>().FirstOrDefault();
@@ -69,6 +72,7 @@ namespace MooncakeTool.Common
                     operation.State = model.StateValue;
                     operation.LogAt = DateTime.Now;
                     operation.LogInfo = model.Log;
+                    operation.SampleCodeId = model.SampleCodeId;
                     dbContext.CodeOperations.Add(operation);
                     dbContext.SaveChanges();
                 }
