@@ -213,7 +213,11 @@ namespace MooncakeTool.Common
                 }
                 if (num > 0 && num != null)
                 {
-                    card.States = dbContext.CodeStates.Where(c => c.Num <= num).OrderBy(c=>c.Num).ToList<CodeState>();
+                    card.States = dbContext.CodeStates.Where(c => c.Num <= num).OrderBy(c => c.Num).ToList<CodeState>();
+                }
+                else
+                {
+                    card.States = dbContext.CodeStates.Where(c => c.Num == 1).ToList<CodeState>();
                 }
                 cards.Add(card);
             }
