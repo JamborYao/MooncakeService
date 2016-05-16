@@ -176,8 +176,8 @@ namespace MooncakeTool.Common
         public static List<CardModel> GetCardInfo(int page, string searchKey, int? product, int? platform, int? state)
         {
             AzureReportEntities dbContext = new AzureReportEntities();
-          
-           
+
+
             var result = dbContext.GetSearchSamples(searchKey, state.ToString(), product.ToString(), platform.ToString()).OrderBy(c => c.Id).Skip(page - 1).Take(numberEachPage);
 
             List<CardModel> cards = new List<CardModel>();
@@ -190,14 +190,14 @@ namespace MooncakeTool.Common
                 card.NewCommitsHistory = HistoryDll.NewCommitNumber(item.Id);
 
                 card.Description = item.Description;
+                card.Platforms = new List<string>();
                 dbContext.SamplePlatforms.Where(c => c.SampleCodeId == item.Id).ToList<SamplePlatform>().ForEach(p =>
                 {
-                    card.Platforms = new List<string>();
                     card.Platforms.Add(PlatformDll.FindPlatformNamebyId(p.PlatformId));
                 });
+                card.Products = new List<string>();
                 dbContext.SampleProducts.Where(c => c.SampleCodeId == item.Id).ToList<SampleProduct>().ForEach(p =>
                 {
-                    card.Products = new List<string>();
                     card.Products.Add(ProductDll.FindProductNamebyId(p.ProductId));
                 });
 
@@ -223,7 +223,7 @@ namespace MooncakeTool.Common
             }
             return cards;
         }
-       
+
 
 
         /// <summary>
@@ -233,7 +233,7 @@ namespace MooncakeTool.Common
         public static int[] GetTotalSampleNumber(string searchKey, int? product, int? platform, int? state)
         {
             AzureReportEntities dbContext = new AzureReportEntities();
-         
+
 
             //  CombineExpress(out express, out productExpress, out platformExpress, out stateExpress, searchKey, product, platform, state, dbContext);
 
