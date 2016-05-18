@@ -19,5 +19,6 @@ namespace MooncakeTool.Models
         public string Author { get; set; }
 
         public List<CodeState> States { get; set; }
+        public string GitHubRepro { get; set; }
     }
 }

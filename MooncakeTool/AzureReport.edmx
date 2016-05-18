@@ -41,8 +41,11 @@
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="SampleCodeId" Type="int" />
           <Property Name="LogInfo" Type="nvarchar(max)" />
-          <Property Name="LogAt" Type="date" />
+          <Property Name="LogAt" Type="datetime" />
           <Property Name="State" Type="int" />
+          <Property Name="Labor" Type="real" />
+          <Property Name="LaborDetail" Type="nvarchar(max)" />
+          <Property Name="GitHubRepro" Type="nvarchar(max)" />
         </EntityType>
         <EntityType Name="CodeState">
           <Key>
@@ -59,7 +62,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CreateAt" Type="date" />
+          <Property Name="CreateAt" Type="datetime" />
           <Property Name="Committer" Type="nvarchar" MaxLength="50" />
           <Property Name="Message" Type="nvarchar(max)" />
           <Property Name="Sha" Type="nvarchar(max)" />
@@ -77,11 +80,11 @@
           <Property Name="Title" Type="nvarchar(max)" />
           <Property Name="Body" Type="nvarchar(max)" />
           <Property Name="IssueUser" Type="nvarchar" MaxLength="50" />
-          <Property Name="CreateAt" Type="date" />
+          <Property Name="CreateAt" Type="datetime" />
           <Property Name="State" Type="nvarchar" MaxLength="50" />
           <Property Name="Number" Type="int" />
-          <Property Name="CloseAt" Type="date" />
-          <Property Name="UpdateAt" Type="date" />
+          <Property Name="CloseAt" Type="datetime" />
+          <Property Name="UpdateAt" Type="datetime" />
           <Property Name="Html_Url" Type="nvarchar(max)" />
           <Property Name="IsNew" Type="bit" />
         </EntityType>
@@ -93,10 +96,10 @@
           <Property Name="Title" Type="nvarchar(max)" />
           <Property Name="Body" Type="nvarchar(max)" />
           <Property Name="Html_Url" Type="nvarchar(max)" />
-          <Property Name="CreateAt" Type="date" />
+          <Property Name="CreateAt" Type="datetime" />
           <Property Name="Number" Type="int" />
           <Property Name="State" Type="nvarchar" MaxLength="50" />
-          <Property Name="UpdateAt" Type="date" />
+          <Property Name="UpdateAt" Type="datetime" />
           <Property Name="GitCodeId" Type="int" />
           <Property Name="IsNew" Type="bit" />
         </EntityType>
@@ -136,10 +139,10 @@
           <Property Name="Title" Type="nvarchar(max)" />
           <Property Name="Description" Type="nvarchar(max)" />
           <Property Name="Author" Type="nvarchar" MaxLength="50" />
-          <Property Name="LastUpdate" Type="date" />
+          <Property Name="LastUpdate" Type="datetime" />
           <Property Name="GitResourceUrl" Type="nvarchar(max)" />
-          <Property Name="CreateAt" Type="date" />
-          <Property Name="CustomAt" Type="date" />
+          <Property Name="CreateAt" Type="datetime" />
+          <Property Name="CustomAt" Type="datetime" />
         </EntityType>
         <EntityType Name="SamplePlatform">
           <Key>
@@ -487,6 +490,16 @@
           <Property Type="DateTime" Name="CreateAt" Nullable="true" />
           <Property Type="DateTime" Name="CustomAt" Nullable="true" />
         </ComplexType>
+        <ComplexType Name="GetSearchSamples_Result">
+          <Property Type="Int32" Name="Id" Nullable="true" />
+          <Property Type="String" Name="Title" Nullable="true" />
+          <Property Type="String" Name="Description" Nullable="true" />
+          <Property Type="String" Name="Author" Nullable="true" />
+          <Property Type="DateTime" Name="LastUpdate" Nullable="true" />
+          <Property Type="String" Name="GitResourceUrl" Nullable="true" />
+          <Property Type="DateTime" Name="CreateAt" Nullable="true" />
+          <Property Type="DateTime" Name="CustomAt" Nullable="true" />
+        </ComplexType>
         <EntityType Name="BaseThread">
           <Key>
             <PropertyRef Name="Id" />
@@ -523,9 +536,12 @@
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="SampleCodeId" Type="Int32" />
           <Property Name="LogInfo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="LogAt" Type="DateTime" Precision="0" />
+          <Property Name="LogAt" Type="DateTime" Precision="3" />
           <Property Name="State" Type="Int32" />
+          <Property Name="Labor" Type="Single" />
+          <Property Name="LaborDetail" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="SampleCode" Relationship="AzureReportModel.FK_CodeOperation_SampleCode" FromRole="CodeOperation" ToRole="SampleCode" />
+          <Property Name="GitHubRepro" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="CodeState">
           <Key>
@@ -542,7 +558,7 @@
             <PropertyRef Name="Id" />
           </Key>
           <Property Name="Id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CreateAt" Type="DateTime" Precision="0" />
+          <Property Name="CreateAt" Type="DateTime" Precision="3" />
           <Property Name="Committer" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Message" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Sha" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -561,11 +577,11 @@
           <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IssueUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="CreateAt" Type="DateTime" Precision="0" />
+          <Property Name="CreateAt" Type="DateTime" Precision="3" />
           <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Number" Type="Int32" />
-          <Property Name="CloseAt" Type="DateTime" Precision="0" />
-          <Property Name="UpdateAt" Type="DateTime" Precision="0" />
+          <Property Name="CloseAt" Type="DateTime" Precision="3" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <Property Name="Html_Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="IsNew" Type="Boolean" />
           <NavigationProperty Name="SampleCode" Relationship="AzureReportModel.FK_GitIssue_SampleCode" FromRole="GitHubIssue" ToRole="SampleCode" />
@@ -578,10 +594,10 @@
           <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Body" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Html_Url" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CreateAt" Type="DateTime" Precision="0" />
+          <Property Name="CreateAt" Type="DateTime" Precision="3" />
           <Property Name="Number" Type="Int32" />
           <Property Name="State" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="UpdateAt" Type="DateTime" Precision="0" />
+          <Property Name="UpdateAt" Type="DateTime" Precision="3" />
           <Property Name="GitCodeId" Type="Int32" />
           <Property Name="IsNew" Type="Boolean" />
           <NavigationProperty Name="SampleCode" Relationship="AzureReportModel.FK_GitPull_SampleCode" FromRole="GitHubPullRequest" ToRole="SampleCode" />
@@ -624,10 +640,10 @@
           <Property Name="Title" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Author" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
-          <Property Name="LastUpdate" Type="DateTime" Precision="0" />
+          <Property Name="LastUpdate" Type="DateTime" Precision="3" />
           <Property Name="GitResourceUrl" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
-          <Property Name="CreateAt" Type="DateTime" Precision="0" />
-          <Property Name="CustomAt" Type="DateTime" Precision="0" />
+          <Property Name="CreateAt" Type="DateTime" Precision="3" />
+          <Property Name="CustomAt" Type="DateTime" Precision="3" />
           <NavigationProperty Name="CodeOperations" Relationship="AzureReportModel.FK_CodeOperation_SampleCode" FromRole="SampleCode" ToRole="CodeOperation" />
           <NavigationProperty Name="GitHubCommits" Relationship="AzureReportModel.FK_GitCommit_SampleCode" FromRole="SampleCode" ToRole="GitHubCommit" />
           <NavigationProperty Name="GitHubIssues" Relationship="AzureReportModel.FK_GitIssue_SampleCode" FromRole="SampleCode" ToRole="GitHubIssue" />
@@ -761,16 +777,6 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <ComplexType Name="GetSearchSamples_Result">
-          <Property Type="Int32" Name="Id" Nullable="true" />
-          <Property Type="String" Name="Title" Nullable="true" />
-          <Property Type="String" Name="Description" Nullable="true" />
-          <Property Type="String" Name="Author" Nullable="true" />
-          <Property Type="DateTime" Name="LastUpdate" Nullable="true" />
-          <Property Type="String" Name="GitResourceUrl" Nullable="true" />
-          <Property Type="DateTime" Name="CreateAt" Nullable="true" />
-          <Property Type="DateTime" Name="CustomAt" Nullable="true" />
-        </ComplexType>
         </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -871,6 +877,9 @@
           <EntitySetMapping Name="CodeOperations">
             <EntityTypeMapping TypeName="AzureReportModel.CodeOperation">
               <MappingFragment StoreEntitySet="CodeOperation">
+                <ScalarProperty Name="GitHubRepro" ColumnName="GitHubRepro" />
+                <ScalarProperty Name="LaborDetail" ColumnName="LaborDetail" />
+                <ScalarProperty Name="Labor" ColumnName="Labor" />
                 <ScalarProperty Name="State" ColumnName="State" />
                 <ScalarProperty Name="LogAt" ColumnName="LogAt" />
                 <ScalarProperty Name="LogInfo" ColumnName="LogInfo" />

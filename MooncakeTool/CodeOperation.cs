@@ -19,6 +19,9 @@ namespace MooncakeTool
         public string LogInfo { get; set; }
         public Nullable<System.DateTime> LogAt { get; set; }
         public Nullable<int> State { get; set; }
+        public Nullable<float> Labor { get; set; }
+        public string LaborDetail { get; set; }
+        public string GitHubRepro { get; set; }
         [Newtonsoft.Json.JsonIgnore]
         public virtual SampleCode SampleCode { get; set; }
     }

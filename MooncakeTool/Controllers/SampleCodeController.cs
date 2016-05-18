@@ -13,10 +13,10 @@ using System.Web.Http.Results;
 
 namespace MooncakeTool.Controllers
 {
-    [EnableCors(origins: "http://localhost:35273", headers: "*", methods: "*")]
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
     public class SampleCodeController : ApiController
     {
-        /// <summary>
+        /// <summaryst>
         /// background service used to update database:
         /// 1) code sample table
         /// 2) githubissue table
@@ -159,7 +159,7 @@ namespace MooncakeTool.Controllers
         [HttpPost]
         public void UpdateCodeState(OperationModel data)
         {
-            CodeOperationDll.UpdateOperation(data);
+            CodeOperationDll.AddOperation(data);
         }
     }
 }

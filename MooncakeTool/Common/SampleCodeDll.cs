@@ -204,10 +204,16 @@ namespace MooncakeTool.Common
                 card.Author = item.Author;
                 card.Link = item.GitResourceUrl;
                 card.States = new List<CodeState>();
-                var operation = dbContext.CodeOperations.Where(c => c.SampleCodeId == item.Id);
+                var operation = dbContext.CodeOperations.Where(c => c.SampleCodeId == item.Id).OrderByDescending(p=>p.LogAt);
+                
                 int? id, num = null;
                 if (operation.Count() >= 1)
                 {
+                    var gitrepro = operation.Where(c => c.State == 2).OrderBy(p=>p.LogAt);
+                    if (gitrepro.Count() >= 1)
+                    {
+                        card.GitHubRepro = gitrepro.FirstOrDefault().GitHubRepro;
+                    }
                     id = operation.FirstOrDefault().State;
                     num = dbContext.CodeStates.Where(c => c.Id == id).FirstOrDefault().Num;
                 }
