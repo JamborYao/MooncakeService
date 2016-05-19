@@ -13,7 +13,7 @@ using System.Web.Http.Results;
 
 namespace MooncakeTool.Controllers
 {
-    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [EnableCors(origins: "http://10.168.172.89:89", headers: "*", methods: "*")]
     public class SampleCodeController : ApiController
     {
         /// <summaryst>

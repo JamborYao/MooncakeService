@@ -318,7 +318,9 @@
       <DependentUpon>AzureReport.edmx</DependentUpon>
     </Content>
     <Content Include="App_Data\AzureReport.bak" />
+    <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
     <None Include="Properties\PublishProfiles\mooncakeTool.pubxml" />
+    <None Include="Properties\PublishProfiles\test.pubxml" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />

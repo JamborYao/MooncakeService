@@ -31,14 +31,9 @@ namespace MooncakeTool.Common
         {
             AzureReportEntities dbContext = new AzureReportEntities();
             var result = dbContext.Histories.Where(c => c.GitCodeId == id);
-            if (result != null)
-            {
-                return result.Count();
-            }
-            else
-            {
-                return 0;
-            }
+
+            return result.Count();
+
         }
 
         public enum HistoryType
