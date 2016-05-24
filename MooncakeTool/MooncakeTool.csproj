@@ -201,6 +201,7 @@
     <Compile Include="Common\BaseThreadDll.cs" />
     <Compile Include="Common\CodeOperationDll.cs" />
     <Compile Include="Common\CommitDll.cs" />
+    <Compile Include="Common\EFJsonIgnore.cs" />
     <Compile Include="Common\ExcelHelper.cs" />
     <Compile Include="Common\GitHubDeveloper.cs" />
     <Compile Include="Common\HistoryDll.cs" />
@@ -266,9 +267,6 @@
       <DependentUpon>AzureReport.tt</DependentUpon>
     </Compile>
     <Compile Include="sp_helpdiagrams_Result.cs">
-      <DependentUpon>AzureReport.tt</DependentUpon>
-    </Compile>
-    <Compile Include="sysdiagram.cs">
       <DependentUpon>AzureReport.tt</DependentUpon>
     </Compile>
   </ItemGroup>

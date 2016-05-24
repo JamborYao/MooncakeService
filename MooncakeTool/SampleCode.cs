@@ -20,6 +20,7 @@ namespace MooncakeTool
             this.GitHubCommits = new HashSet<GitHubCommit>();
             this.GitHubIssues = new HashSet<GitHubIssue>();
             this.GitHubPullRequests = new HashSet<GitHubPullRequest>();
+            this.Histories = new HashSet<History>();
             this.SamplePlatforms = new HashSet<SamplePlatform>();
             this.SampleProducts = new HashSet<SampleProduct>();
         }
@@ -37,6 +38,7 @@ namespace MooncakeTool
         public virtual ICollection<GitHubCommit> GitHubCommits { get; set; }
         public virtual ICollection<GitHubIssue> GitHubIssues { get; set; }
         public virtual ICollection<GitHubPullRequest> GitHubPullRequests { get; set; }
+        public virtual ICollection<History> Histories { get; set; }
         public virtual ICollection<SamplePlatform> SamplePlatforms { get; set; }
         public virtual ICollection<SampleProduct> SampleProducts { get; set; }
     }

@@ -18,7 +18,7 @@ namespace MooncakeTool.Common
                     History history = new History();
                     history.HistoryType = Enum.GetName(typeof(HistoryDll.HistoryType), HistoryDll.HistoryType.commit);
                     history.ForeignId = p.Id;
-                    history.GitCodeId = p.GitCodeId;
+                    history.SampleCodeId = p.GitCodeId;
                     history.IsHistory = true;
                     HistoryDll.InsertHistory(history);
                 });

@@ -35,6 +35,69 @@ namespace MooncakeTool.Common
 
         }
 
+        public static void ReplaceEntity(SampleCode origin, SampleCode newEntity)
+        {
+            origin.Author = newEntity.Author;
+            origin.CodeOperations = newEntity.CodeOperations;
+            origin.CreateAt = newEntity.CreateAt;
+            origin.CustomAt = newEntity.CustomAt;
+            origin.Description = newEntity.Description;
+            // origin.GitHubCommits = newEntity.GitHubCommits;
+            newEntity.GitHubCommits.ToList<GitHubCommit>().ForEach(c =>
+            {
+                if (origin.GitHubCommits.Any(d => d.Sha == c.Sha))
+                {
+                    //origin.GitHubCommits.Add(c);
+                }
+                else
+                {
+                    //add new commit to history
+                    History history = new History();
+                    history.IsHistory = true;
+                    history.HistoryType = "Commit";
+                    history.IsShow = true;
+                    int? finish = null;
+                    var flag = SetCommitIsShow(origin.Id,ref finish);
+
+                    if (flag != null && flag == finish)
+                    {
+                        history.IsShow = true;
+                    }
+                    else
+                    {
+                        history.IsShow = false;
+                    }
+                    
+                    history.LogAt = DateTime.Now;
+                    origin.Histories.Add(history);
+
+                    origin.GitHubCommits.Add(c);
+                }
+            });
+
+            // origin.GitHubIssues = newEntity.GitHubIssues;
+            // origin.GitHubPullRequests = newEntity.GitHubPullRequests;
+            //origin.History = newEntity.History;
+            origin.LastUpdate = newEntity.LastUpdate;
+            // origin.SamplePlatforms = newEntity.SamplePlatforms;
+            // origin.SampleProducts = newEntity.SampleProducts;
+            origin.Title = newEntity.Title;
+        }
+
+        public static int? SetCommitIsShow(int sampleCodeId,ref int? finish)
+        {
+            AzureReportEntities dbContext = new AzureReportEntities();
+            var operation = dbContext.CodeOperations.Where(c => c.SampleCodeId == sampleCodeId).OrderByDescending(p => p.LogAt).FirstOrDefault();
+            finish = dbContext.CodeStates.OrderByDescending(c => c.Num).FirstOrDefault().Num;
+            if (operation != null)
+            {
+                return dbContext.CodeStates.Where(c => c.Id == operation.State).FirstOrDefault().Num;
+            }
+            else
+            {
+                return null;
+            }
+        }
         /// <summary>
         /// batch insert sample code
         /// </summary>
@@ -42,33 +105,46 @@ namespace MooncakeTool.Common
         /// <returns></returns>
         public static bool BatchInsertSampleCode(List<SampleCode> entities)
         {
+
             AzureReportEntities dbContext = new AzureReportEntities();
             try
             {
                 foreach (var entity in entities)
                 {
+
                     if (dbContext.SampleCodes.Any(c => c.Description == entity.Description))
                     {
                         //update
                         var original = dbContext.SampleCodes.Where(c => c.Description == entity.Description).FirstOrDefault();
                         if (original != null)
                         {
-                            entity.Id = original.Id;
-                            //update gipull table if exist update, else add
-                            AddOrUpdateGitPull(entity, original, dbContext);
-                            AddOrUpdateGitIssue(entity, original, dbContext);
-                            AddOrUpdateGitCommit(entity, original, dbContext);
-                            dbContext.Entry(original).CurrentValues.SetValues(entity);
+                            //entity.Id = original.Id;
+                            ////update gipull table if exist update, else add
+                            ////AddOrUpdateGitPull(entity, original, dbContext);
+                            ////AddOrUpdateGitIssue(entity, original, dbContext);
+                            //AddOrUpdateGitCommit(entity, original, dbContext);
+                            ReplaceEntity(original, entity);
+                            dbContext.SaveChanges();
+                            //dbContext.Entry(original).CurrentValues.SetValues(entity);
                         }
                     }
                     else {
-                        //add               
+                        //add           
+                        History history = new History();
+                        history.IsHistory = true;
+                        history.HistoryType = "CodeSample";
+                        history.IsShow = false;
+                        history.LogAt = DateTime.Now;
+                        entity.Histories.Add(history);
+
                         dbContext.SampleCodes.Add(entity);
-                        AddOrUpdateGitPull(entity, null, dbContext);
-                        AddOrUpdateGitIssue(entity, null, dbContext);
-                        AddOrUpdateGitCommit(entity, null, dbContext);
+                        dbContext.SaveChanges();
+
+                        //AddOrUpdateGitPull(entity, null, dbContext);
+                        //AddOrUpdateGitIssue(entity, null, dbContext);
+                        //AddOrUpdateGitCommit(entity, null, dbContext);
                     }
-                    dbContext.SaveChanges();
+
                     //' CommitDll.FindAllIsNewEntity();
                 }
 
@@ -92,6 +168,7 @@ namespace MooncakeTool.Common
 
         }
 
+        #region
         /// <summary>
         /// if gitpull table has item update it, if not exist add
         /// </summary>
@@ -172,7 +249,7 @@ namespace MooncakeTool.Common
                 }
             });
         }
-
+        #endregion
         public static List<CardModel> GetCardInfo(int page, string searchKey, int? product, int? platform, int? state)
         {
             AzureReportEntities dbContext = new AzureReportEntities();
@@ -204,12 +281,13 @@ namespace MooncakeTool.Common
                 card.Author = item.Author;
                 card.Link = item.GitResourceUrl;
                 card.States = new List<CodeState>();
-                var operation = dbContext.CodeOperations.Where(c => c.SampleCodeId == item.Id).OrderByDescending(p=>p.LogAt);
-                
+                var operation = dbContext.CodeOperations.Where(c => c.SampleCodeId == item.Id).OrderByDescending(p => p.LogAt);
+
                 int? id, num = null;
                 if (operation.Count() >= 1)
                 {
-                    var gitrepro = operation.Where(c => c.State == 2).OrderBy(p=>p.LogAt);
+                    //find state = 2 show github repro, if not find no result
+                    var gitrepro = operation.Where(c => c.State == 2).OrderBy(p => p.LogAt);
                     if (gitrepro.Count() >= 1)
                     {
                         card.GitHubRepro = gitrepro.FirstOrDefault().GitHubRepro;

@@ -13,7 +13,8 @@ using System.Web.Http.Results;
 
 namespace MooncakeTool.Controllers
 {
-    [EnableCors(origins: "http://10.168.172.89:89", headers: "*", methods: "*")]
+    //[EnableCors(origins: "http://10.168.172.89:89", headers: "*", methods: "*")]
+    [EnableCors(origins: "http://localhost:35273", headers: "*", methods: "*")]
     public class SampleCodeController : ApiController
     {
         /// <summaryst>
@@ -38,9 +39,9 @@ namespace MooncakeTool.Controllers
                 HtmlAgilityHelper.HtmlToEntity(HttpRequestHelper.GetOnePageHtml(num), ref samples, ref num);
                 num++;
             }
-            while (num > 0);
+            while (num !=0);
             SampleCodeDll.BatchInsertSampleCode(samples);
-            CommitDll.FindAllIsNewEntity();
+           // CommitDll.FindAllIsNewEntity();
         }
 
         /// <summary>

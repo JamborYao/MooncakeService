@@ -30,7 +30,7 @@ namespace MooncakeTool.Common
         public static int NewCommitNumber(int? id)
         {
             AzureReportEntities dbContext = new AzureReportEntities();
-            var result = dbContext.Histories.Where(c => c.GitCodeId == id);
+            var result = dbContext.Histories.Where(c => c.SampleCodeId == id&&c.IsHistory==true&&c.HistoryType== "Commit");
 
             return result.Count();
 

@@ -40,7 +40,6 @@ namespace MooncakeTool
         public DbSet<SampleCode> SampleCodes { get; set; }
         public DbSet<SamplePlatform> SamplePlatforms { get; set; }
         public DbSet<SampleProduct> SampleProducts { get; set; }
-        public DbSet<sysdiagram> sysdiagrams { get; set; }
     
         public virtual ObjectResult<MSDNVolumn_Result> MSDNVolumn(Nullable<System.DateTime> startdate, Nullable<System.DateTime> enddate)
         {

@@ -62,8 +62,8 @@ namespace MooncakeTool.Common
                         }
                     }
                     //add sample code pull request
-                    sample.GitHubPullRequests = MooncakeTool.Common.GitHubDeveloper.GetGitHubPullEntity(sample.GitResourceUrl);
-                    sample.GitHubIssues= MooncakeTool.Common.GitHubDeveloper.GetGitHubIssuesEntity(sample.GitResourceUrl);
+                    //sample.GitHubPullRequests = MooncakeTool.Common.GitHubDeveloper.GetGitHubPullEntity(sample.GitResourceUrl);
+                   // sample.GitHubIssues= MooncakeTool.Common.GitHubDeveloper.GetGitHubIssuesEntity(sample.GitResourceUrl);
                     sample.GitHubCommits = MooncakeTool.Common.GitHubDeveloper.GetGitHubCommitsEntity(sample.GitResourceUrl);
 
                     samples.Add(sample);
